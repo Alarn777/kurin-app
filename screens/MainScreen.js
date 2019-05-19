@@ -21,11 +21,11 @@ export default class MainScreen extends Component<Props> {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to Native!</Text>
-        <Button
-          style={styles.button}
-          title="Test"
-          onPress={() => this.props.navigation.navigate('Gyroscope')}
-        />
+        {/*<Button*/}
+        {/*  style={styles.button}*/}
+        {/*  title="Test"*/}
+        {/*  onPress={() => this.props.navigation.navigate('Gyroscope')}*/}
+        {/*/>*/}
       </View>
     )
   }
