@@ -4,6 +4,7 @@
 /.idea
 # Xcode
 #
+/android
 build/
 /android
 /ios
