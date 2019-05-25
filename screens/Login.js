@@ -1,6 +1,6 @@
 
 import UserScreen from './User/MainScreen'
-import CleanerScreen from './Cleaner/MainScreen'
+import CleanerScreen from './Cleaner/MainScreenCleaner'
 import Icon from 'react-native-vector-icons/Ionicons';
 import React, { Component } from 'react';
 import {
@@ -56,17 +56,16 @@ export default class Login extends React.Component {
       this.props.navigation.navigate('Register')
     }
     if(viewId === 'login'){
-
       //simplifyLogin
-      // this.props.navigation.navigate('HomeScreenCleaner', {
-      //   userToken: 'asdasd',
-      //   userEmail:'Mona@gmail.com'
-      // });
-
-      this.props.navigation.navigate('HomeScreenUser', {
+      this.props.navigation.navigate('HomeScreenCleaner', {
         userToken: 'asdasd',
-        userEmail:'John@gmail.com'
+        userEmail:'Mona@gmail.com'
       });
+
+      // this.props.navigation.navigate('HomeScreenUser', {
+      //   userToken: 'asdasd',
+      //   userEmail:'John@gmail.com'
+      // });
 
       // this.fetchData()
 

@@ -1,7 +1,7 @@
 import LinearGradient from 'react-native-linear-gradient';
 import Consts from '../ENV_VARS'
 import UserScreen from './User/MainScreen'
-import CleanerScreen from './Cleaner/MainScreen'
+import CleanerScreen from './Cleaner/MainScreenCleaner'
 import Icon from 'react-native-vector-icons/Ionicons';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import React, { Component, } from 'react';

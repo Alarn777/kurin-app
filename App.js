@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import HomeScreenUser from './screens/User/MainScreen'
-import HomeScreenCleaner from './screens/Cleaner/MainScreen'
+import HomeScreenCleaner from './screens/Cleaner/MainScreenCleaner'
 import Login from './screens/Login'
 import Register from './screens/Register'
 
