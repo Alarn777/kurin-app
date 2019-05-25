@@ -1,0 +1,61 @@
+{
+  "name": "kurin_app",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@shoutem/cli": "^0.10.11",
+    "@shoutem/ui": "^0.23.20",
+    "add": "^2.0.6",
+    "axios": "^0.18.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-native": "^4.0.0",
+    "eslint-plugin-jest": "^22.5.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-native": "^3.7.0",
+    "prettier": "^1.17.1",
+    "react": "16.8.3",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-icons": "^2",
+    "react-native": "0.59.8",
+    "react-native-elements": "^1.1.0",
+    "react-native-fade": "^1.0.3",
+    "react-native-fade-in-view": "^1.0.5",
+    "react-native-gesture-handler": "^1.2.1",
+    "react-native-linear-gradient": "^2.5.4",
+    "react-native-material-bottom-navigation": "^1.0.3",
+    "react-native-modal": "^11.0.1",
+    "react-native-paper": "^2.15.2",
+    "react-native-progress": "^3.6.0",
+    "react-native-progress-bar-animated": "^1.0.6",
+    "react-native-really-awesome-button": "^1.4.2",
+    "react-native-screens": "^1.0.0-alpha.22",
+    "react-native-simple-radio-button": "^2.7.3",
+    "react-native-star-rating": "^1.1.0",
+    "react-native-vector-icons": "^6.4.2",
+    "react-navigation": "^3.11.0",
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "react-redux": "^7.0.3",
+    "redux": "^4.0.1",
+    "redux-axios-middleware": "^4.0.0",
+    "socket.io-client": "^2.2.0",
+    "yarn": "^1.16.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.54.1",
+    "react-test-renderer": "16.8.3"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
