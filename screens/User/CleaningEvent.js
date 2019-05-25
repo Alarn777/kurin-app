@@ -1,80 +1,71 @@
-import React from "react";
-import { PropTypes } from 'react'
-import { ActivityIndicator, View } from "react-native";
-import * as Progress from 'react-native-progress';
-import { Button, Card, Text,ListItem } from "react-native-elements";
-import StarRating from "react-native-star-rating";
-import Modal from "react-native-modal";
-import axios from "axios";
-import Consts from "../../ENV_VARS";
+import React,{ PropTypes } from  "react";
+
+import { ActivityIndicator, View } from 'react-native'
+import * as Progress from 'react-native-progress'
+import { Button, Card, Text, ListItem } from 'react-native-elements'
+import StarRating from 'react-native-star-rating'
+import Modal from 'react-native-modal'
+import axios from 'axios'
+import Consts from '../../ENV_VARS'
 
 export default class CleaningEvent extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       event: null,
       isModalVisible: false,
-      canRate:false,
-      isModalVisibleOK:false,
+      canRate: false,
+      isModalVisibleOK: false,
       starCount: this.props.event.rating,
-      progress:0
-    };
+      progress: 0
+    }
 
-    this.cancelEvent = this.cancelEvent.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.cancelEvent = this.cancelEvent.bind(this)
+    this.closeModal = this.closeModal.bind(this)
     this.button = this.button.bind(this)
     // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
   }
 
-
   onStarRatingPress(rating) {
     this.setState({
       starCount: rating
-    });
+    })
   }
-
-
 
   addToStarredCleaner() {
-    this.props.addToStarredCleaner({userEmail: this.state.event.eventUser, cleanerEmail: this.state.event.eventCleaner})
+    this.props.addToStarredCleaner({
+      userEmail: this.state.event.eventUser,
+      cleanerEmail: this.state.event.eventCleaner
+    })
   }
-
 
   componentDidMount(): void {
     this.setState({
       event: this.props.event,
-      starCount:this.props.event.feedBack
+      starCount: this.props.event.feedBack
     })
   }
 
-
   toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
+    this.setState({ isModalVisible: !this.state.isModalVisible })
+  }
 
   toggleModalOK = () => {
-    this.setState({ isModalVisibleOK: !this.state.isModalVisibleOK });
-  };
-
+    this.setState({ isModalVisibleOK: !this.state.isModalVisibleOK })
+  }
 
   async cancelEvent() {
     this.toggleModal()
     try {
-      const response = await axios.post(Consts.host + '/deleteEvent',
-        {
-          id: this.state.event._id
-        });
-    } catch (err) {
-    }
+      const response = await axios.post(Consts.host + '/deleteEvent', {
+        id: this.state.event._id
+      })
+    } catch (err) {}
 
     this.props.cancelCleaner(this.state.event)
   }
 
-
-
-
-
-  closeModal(){
+  closeModal() {
     this.toggleModal()
   }
 
@@ -82,8 +73,7 @@ export default class CleaningEvent extends React.Component {
     if(this.state.event.status === 'Finished'){
       return false
     }
-    else
-      return true
+    return true
   }
 
   button(){
@@ -129,10 +119,8 @@ export default class CleaningEvent extends React.Component {
 
       // this.setState({canRate:true})
     }
-    else
-      return <View/>
+    return <View/>
   }
-
 
   render() {
     if (this.state.event) {
@@ -160,10 +148,16 @@ export default class CleaningEvent extends React.Component {
         progressStyles.value = 1
 
       }
-
+      let cardWidth = 0
 
         return (
-        <Card  title={'Event ' + this.state.event.date + ' ' + this.state.event.time}>
+        <Card
+            onLayout={(event) => {
+              var {x, y, width, height} = event.nativeEvent.layout;
+              cardWidth = width
+            }}
+          title={'Event ' + this.state.event.date + ' ' + this.state.event.time}
+        >
           <ListItem
           title={'Agent name: ' + this.state.event.eventCleanerName}
         />
@@ -174,7 +168,7 @@ export default class CleaningEvent extends React.Component {
 
           <Progress.Bar
             progress={progressStyles.value}
-            width={300}
+            width={cardWidth}
             style={{alignSelf:'center',width:'90%'}}
             color={progressStyles.color}
           />
@@ -231,8 +225,8 @@ export default class CleaningEvent extends React.Component {
         </Card>
     );
 
-    } else {
+    } 
       return <ActivityIndicator style={{flex:1}} size="large" color="#8BC34A"/>
-    }
+    
   }
 }
