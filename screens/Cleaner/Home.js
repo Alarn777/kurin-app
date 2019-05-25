@@ -6,7 +6,7 @@ import AwesomeButton from "react-native-really-awesome-button";
 import StarRating from "react-native-star-rating";
 import Consts from "../../ENV_VARS";
 import { bindActionCreators } from 'redux';
-import { addCleaner, addEvent, addSocket, removeCleaner, removeEvent } from "../../FriendActions";
+import { addCleaner, addEvent, addSocket, removeCleaner, removeEvent,reloadEvents } from "../../FriendActions";
 import { connect } from "react-redux";
 import CleaningEventForCleaner from "./CleaningEventForCleaner";
 import RadioForm from "react-native-simple-radio-button";
@@ -216,30 +216,13 @@ class Home extends React.Component {
 
 
   async editEvent(event) {
+    axios.post(Consts.host + '/editEventByCleaner', event)
+      .then(res => {
 
-    console.log(event)
-    // axios.post(Consts.host + '/editEventByCleaner', event)
-    //   .then(res => {
-    //
-    //   })
+      })
 
   }
 
-  // async createEvent(data) {
-  //   axios.post(Consts.host + '/addNewEvent', data)
-  //     .then(res => {
-  //       this.addToProps()
-  //     })
-  // }
-
-  // async addToProps(){
-  //   axios.post(Consts.host + '/findEventsByUserEmail', {email:this.state.userEmail})
-  //     .then(res => {
-  //       for(let event in res.data){
-  //         this.props.addEvent(res.data[event])
-  //       }
-  //     })
-  // }
 
 
 
@@ -479,7 +462,8 @@ const mapDispatchToProps = dispatch => (
     removeCleaner,
     addEvent,
     removeEvent,
-    addSocket
+    addSocket,
+    reloadEvents
   }, dispatch)
 );
 

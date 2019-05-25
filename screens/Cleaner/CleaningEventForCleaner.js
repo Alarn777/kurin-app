@@ -90,9 +90,8 @@ export default class CleaningEventForCleaner extends React.Component {
 
   finilizeEventByCleaner = () =>{
     this.toggleModalOK()
-
-    this.props.home.editEventByCleaner(this.state.event,{email:'',id:this.state.event._id,newStatus:'Finished'})
-    this.props.home.cancelCleaner(this.state.event,false)
+     this.props.home.editEventByCleaner(this.state.event,{email:'',id:this.state.event._id,newStatus:'Finished'},{email:'',id:this.state.event._id,notes:this.state.about})
+    // this.props.home.cancelCleaner(this.state.event,false)
   }
 
 

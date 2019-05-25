@@ -46,28 +46,33 @@ class History extends React.Component {
   }
 
 
-  editEventByCleaner(event,data){
+  editEventByCleaner(event,status,notes){
 
-    data.email = this.state.userEmail
-    event.status = data.newStatus
-    // this.props.addEvent(event)
-    // this.editEvent(event)
-    this.editEvent(data)
+    notes.email = this.state.userEmail
+    event.notesByCleaner = notes.notesByCleaner
+    event.id = notes._id
+    status.email = this.state.userEmail
+
+
+
+
+    this.editEvent(notes,status)
     this.props.addEvent(event)
   }
 
 
 
 
-  async editEvent(event) {
+  async editEvent(notes,status) {
+    axios.post(Consts.host + '/addNotes', notes)
+      .then(res => {
 
+      })
 
-    let data = {notes:'',emial:'',id:''}
-    console.log(event)
-    // axios.post(Consts.host + '/editEventByCleaner', event)
-    //   .then(res => {
-    //
-    //   })
+    axios.post(Consts.host + '/editEventByCleaner', status)
+      .then(res => {
+
+      })
 
   }
 
