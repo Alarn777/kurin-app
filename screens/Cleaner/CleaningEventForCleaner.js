@@ -1,10 +1,57 @@
 import React from 'react'
 
 import { ActivityIndicator, StyleSheet, View } from 'react-native'
-import Progress from 'react-native-progress'
+import { Bar } from 'react-native-progress'
 import { Button, Card, Text, ListItem, Icon, Input } from 'react-native-elements'
 import StarRating from 'react-native-star-rating'
 import Modal from 'react-native-modal'
+import { PropTypes } from 'prop-types'
+
+const styles = StyleSheet.create({
+  inputIcon: {
+    width: 30,
+    height: 30
+  },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    width: '100%',
+    height: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  submitJobButton: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: '#ffc107'
+  },
+  activityIndicaotr: { flex: 1 },
+  modal: { justifyContent: 'center' },
+  noteTextInput: { margin: 10 },
+  modalOkButton: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: '#ffc107'
+  },
+  declineJobButton: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: '#FF5722'
+  },
+  modalYesButton: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: '#8BC34A'
+  },
+  modalNoButton: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: 'red'
+  }
+})
 
 export default class CleaningEventForCleaner extends React.Component {
   constructor(props) {
@@ -20,7 +67,7 @@ export default class CleaningEventForCleaner extends React.Component {
     }
 
     // this.cancelEvent = this.cancelEvent.bind(this);
-    this.closeModal = this.closeModal.bind(this)
+    this.closeModal = this.handleDeclineRequestNoPress.bind(this)
     this.button = this.button.bind(this)
     // this.cancelCleaner = this.cancelCleaner.bind(this)
     // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
@@ -47,37 +94,21 @@ export default class CleaningEventForCleaner extends React.Component {
     })
   }
 
-  // cancelCleaner(){
-  //   this.props.cancelCleaner(this.state.event)
-  // }
-
-  toggleModal = () => {
+  handleDeclineJobPress() {
     this.setState({ isModalVisible: !this.state.isModalVisible })
   }
 
-  toggleModalOK = () => {
+  handleSubmitJobPress() {
     this.setState({ isModalVisibleOK: !this.state.isModalVisibleOK })
   }
 
-  cancelEvent = () => {
-    this.toggleModal()
-    // this.cancelEvent()
+  handleDeclineRequestYesPress() {
+    this.handleDeclineJobPress()
     this.props.home.cancelCleaner(this.state.event, true)
   }
 
-  // async cancelEvent() {
-  //     // this.toggleModal()
-  //     try {
-  //       const response = await axios.post(Consts.host + '/deleteEvent',
-  //         {
-  //           id: this.state.event._id
-  //         });
-  //     } catch (err) {
-  //     }
-  //   }
-
-  editEventByCleaner = () => {
-    this.toggleModalOK()
+  handleEditEventByCleaner() {
+    this.handleSubmitJobPress()
 
     this.props.home.editEventByCleaner(this.state.event, {
       email: '',
@@ -87,8 +118,8 @@ export default class CleaningEventForCleaner extends React.Component {
     this.props.home.cancelCleaner(this.state.event, false)
   }
 
-  finilizeEventByCleaner = () => {
-    this.toggleModalOK()
+  handleFinilizeEventByCleaner() {
+    this.handleSubmitJobPress()
     this.props.home.editEventByCleaner(
       this.state.event,
       { email: '', id: this.state.event._id, newStatus: 'Finished' },
@@ -97,8 +128,8 @@ export default class CleaningEventForCleaner extends React.Component {
     // this.props.home.cancelCleaner(this.state.event,false)
   }
 
-  closeModal() {
-    this.toggleModal()
+  handleDeclineRequestNoPress() {
+    this.handleDeclineJobPress()
   }
 
   eventStatus() {
@@ -114,22 +145,18 @@ export default class CleaningEventForCleaner extends React.Component {
         <View>
           <Button
             backgroundColor="#03A9F4"
-            buttonStyle={{
-              borderRadius: 1,
-              margin: 5,
-              backgroundColor: '#ffc107'
-            }}
-            onPress={this.toggleModalOK}
+            buttonStyle={styles.submitJobButton}
+            onPress={this.handleSubmitJobPress}
             title="Submit Job"
           />
-          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisibleOK}>
+          <Modal style={styles.modal} isVisible={this.state.isModalVisibleOK}>
             <Card
               title={
                 'Add notes and complete ' + this.state.event.date + ' ' + this.state.event.time
               }
             >
               <Input
-                containerStyle={{ margin: 10 }}
+                containerStyle={styles.noteTextInput}
                 label="Notes"
                 placeholder="Add notes..."
                 value={this.state.about}
@@ -138,12 +165,8 @@ export default class CleaningEventForCleaner extends React.Component {
 
               <Button
                 backgroundColor="#03A9F4"
-                buttonStyle={{
-                  borderRadius: 1,
-                  margin: 5,
-                  backgroundColor: '#ffc107'
-                }}
-                onPress={this.finilizeEventByCleaner}
+                buttonStyle={styles.modalOkButton}
+                onPress={this.handleFinilizeEventByCleaner}
                 title="OK"
               />
             </Card>
@@ -174,63 +197,39 @@ export default class CleaningEventForCleaner extends React.Component {
         <View>
           <Button
             backgroundColor="#03A9F4"
-            buttonStyle={{
-              borderRadius: 1,
-              margin: 5,
-              backgroundColor: '#FF5722'
-            }}
-            onPress={this.toggleModal}
+            buttonStyle={styles.declineJobButton}
+            onPress={this.handleDeclineJobPress}
             title="Decline Job"
           />
-          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
+          <Modal style={styles.modal} isVisible={this.state.isModalVisible}>
             <Card title={'Decline Request ?'}>
               <Button
                 backgroundColor="#03A9F4"
-                buttonStyle={{
-                  borderRadius: 1,
-                  margin: 5,
-                  backgroundColor: '#8BC34A'
-                }}
-                onPress={this.cancelEvent}
+                buttonStyle={styles.modalYesButton}
+                onPress={this.handleDeclineRequestYesPress}
                 title="Yes"
               />
               <Button
                 backgroundColor="#03A9F4"
-                buttonStyle={{
-                  borderRadius: 1,
-                  margin: 5,
-                  backgroundColor: 'red'
-                }}
-                onPress={this.closeModal}
+                buttonStyle={styles.modalNoButton}
+                onPress={this.handleDeclineRequestNoPress}
                 title="No"
               />
             </Card>
           </Modal>
           <Button
             backgroundColor="#03A9F4"
-            buttonStyle={{
-              borderRadius: 1,
-              margin: 5,
-              backgroundColor: '#ffc107'
-            }}
-            onPress={this.toggleModalOK}
+            buttonStyle={styles.modalOkButton}
+            onPress={this.handleSubmitJobPress}
             title="Accept Job"
           />
-          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisibleOK}>
+          <Modal style={styles.modal} isVisible={this.state.isModalVisibleOK}>
             <Card title={'Added ' + this.state.event.date + ' ' + this.state.event.time}>
               <ListItem title="You can see it in My Cleans" />
               <Button
                 backgroundColor="#03A9F4"
-                buttonStyle={{
-                  borderRadius: 1,
-                  margin: 5,
-                  backgroundColor: '#ffc107'
-                }}
-                // onPress ={() =>{
-                //   this.toggleModalOK()
-                //   this.addToStarredCleaner()
-                // }}
-                onPress={this.editEventByCleaner}
+                buttonStyle={styles.modalOkButton}
+                onPress={this.handleEditEventByCleaner}
                 title="OK"
               />
             </Card>
@@ -286,7 +285,7 @@ export default class CleaningEventForCleaner extends React.Component {
           <ListItem title={'Agent name: ' + this.state.event.eventCleanerName} />
           <ListItem title={'Request status: ' + this.state.event.status} />
 
-          <Progress.Bar
+          <Bar
             progress={progressStyles.value}
             width={300}
             style={{ alignSelf: 'center', width: '90%' }}
@@ -315,64 +314,11 @@ export default class CleaningEventForCleaner extends React.Component {
         </Card>
       )
     }
-    return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
+    return <ActivityIndicator style={styles.activityIndicaotr} size="large" color="#8BC34A" />
   }
 }
-
-const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  image: {},
-  name: {},
-  user: {},
-  header: {
-    backgroundColor: '#8BC34A',
-    height: 200
-  },
-  text: {
-    fontSize: 20,
-    margin: 5
-  },
-  mainButton: {
-    alignSelf: 'center',
-    margin: 50,
-    // backgroundColor: "#00BFFF",
-    // width:'100%',
-    // height:200
-    // color:"#00BFFF",
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonContainer: {
-    marginTop: 10,
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: '#00BFFF'
-  },
-  inputIcon: {
-    width: 30,
-    height: 30
-    // justifyContent: 'center'
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderBottomWidth: 1,
-    width: '100%',
-    height: 30,
-    // margin:15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-})
+CleaningEventForCleaner.propTypes = {
+  event: PropTypes.any,
+  home: PropTypes.any,
+  addToStarredCleaner: PropTypes.func
+}
