@@ -14,11 +14,6 @@ import axios from "axios";
 import Consts from "../../ENV_VARS";
 import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
 
-const user = {
-  name:'John Doe',
-  description:'UX Designer / Mobile developer',
-  stars:3.5,
-}
 
 export default class Profile extends Component {
   constructor(props) {

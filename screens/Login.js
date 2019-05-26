@@ -1,5 +1,6 @@
 import UserScreen from './User/MainScreen'
 import CleanerScreen from './Cleaner/MainScreenCleaner'
+const sha1 = require('sha1')
 import Icon from 'react-native-vector-icons/Ionicons'
 import React, { Component } from 'react'
 import {
@@ -13,10 +14,12 @@ import {
   Alert,
   ImageBackground
 } from 'react-native'
+// import { sha1 } from 'react-native-sha1'
 import axios from 'axios'
 import Consts from '../ENV_VARS'
 import SocketIOClient from 'socket.io-client'
-import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick';
+
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 
 export default class Login extends React.Component {
   static navigationOptions = {
@@ -41,6 +44,7 @@ export default class Login extends React.Component {
       userToken: ''
     }
     this.fetchData = this.fetchData.bind(this)
+    this.checkIfCleaner = this.checkIfCleaner.bind(this)
     this.dealWithData = this.dealWithData.bind(this)
   }
 
@@ -54,6 +58,7 @@ export default class Login extends React.Component {
     }
     if (viewId === 'login') {
       //simplifyLogin
+      // this.fetchData()
       this.props.navigation.navigate('HomeScreenCleaner', {
         userToken: 'asdasd',
         userEmail:'Mona@gmail.com'
@@ -77,38 +82,54 @@ export default class Login extends React.Component {
         email: this.state.email,
         password: this.state.password
       })
-      this.dealWithData(response.data)
+      this.setState({ userToken: response.data.userToken})
+      this.checkIfCleaner()
+    } catch (err) {}
+  }
+
+  async checkIfCleaner() {
+    try {
+      const response = await axios.post(Consts.host + '/getUserByEmail', {
+        email: this.state.email
+      })
+      if (response.data !== []) {
+        this.dealWithData(response.data)
+        return
+      }
+    } catch (err) {}
+    try {
+      const response = await axios.post(Consts.host + '/getCleanerByEmail', {
+        email: this.state.email
+      })
+      if (response.data !== []) {
+        this.dealWithData(response.data)
+        return
+      }
     } catch (err) {}
   }
 
   dealWithData(data) {
-    if (data.userToken) {
-      this.setState({ userToken: data.userToken })
-      this.props.navigation.navigate('HomeScreenUser', {
+    if (data[0].cleaner) {
+      this.props.navigation.navigate('HomeScreenCleaner', {
         userToken: this.state.userToken,
         userEmail: this.state.email
       })
     } else {
-      this.setState({ lockIconColor: '#B80000', password: '' })
+      this.props.navigation.navigate('HomeScreenUser', {
+        userToken: this.state.userToken,
+        userEmail: this.state.email
+      })
     }
-  }
 
-  validateLogin() {
-    // if(this.state.password !== '1'){
-    //   this.setState({lockIconColor: "#B80000" })
+    // if (data.userToken) {
+    //   this.setState({ userToken: data.userToken })
+    //   this.props.navigation.navigate('HomeScreenUser', {
+    //     userToken: this.state.userToken,
+    //     userEmail: this.state.email
+    //   })
+    // } else {
+    //   this.setState({ lockIconColor: '#B80000', password: '' })
     // }
-    // else {
-    //   this.setState({lockIconColor: "#8BC34A" })
-    // }
-
-    //api call
-
-    this.fetchData()
-
-    //if user
-    // this.props.navigation.navigate('HomeScreenUser', {
-    //   userToken: ''
-    // });
   }
 
   render() {
@@ -161,7 +182,7 @@ export default class Login extends React.Component {
           <AwesomeButtonRick
             type="anchor"
             width={200}
-            style={{margin:15}}
+            style={{ margin: 15 }}
             onPress={() => this.onClickListener('login')}
           >
             Login
@@ -169,7 +190,7 @@ export default class Login extends React.Component {
           <AwesomeButtonRick
             type="primary"
             width={200}
-            style={{margin:15}}
+            style={{ margin: 15 }}
             onPress={() => this.onClickListener('register')}
           >
             Register
@@ -179,7 +200,7 @@ export default class Login extends React.Component {
             style={styles.buttonContainer}
             onPress={() => this.onClickListener('restore_password')}
           >
-            <Text style={{color:'white'}}>Forgot your password?</Text>
+            <Text style={{ color: 'white' }}>Forgot your password?</Text>
           </TouchableHighlight>
         </View>
       </ImageBackground>
@@ -225,14 +246,5 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: 250,
     borderRadius: 30
-  },
-  loginButton: {
-    backgroundColor: '#8BC34A'
-  },
-  registerButton: {
-    backgroundColor: '#00BCD4'
-  },
-  loginText: {
-    // color: 'white',
   }
 })
