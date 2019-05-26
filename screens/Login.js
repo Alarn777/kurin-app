@@ -1,23 +1,17 @@
-import UserScreen from './User/MainScreen'
-import CleanerScreen from './Cleaner/MainScreenCleaner'
-const sha1 = require('sha1')
 import Icon from 'react-native-vector-icons/Ionicons'
-import React, { Component } from 'react'
+import React from 'react'
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
   TouchableHighlight,
   Image,
-  Alert,
   ImageBackground
 } from 'react-native'
 // import { sha1 } from 'react-native-sha1'
 import axios from 'axios'
 import Consts from '../ENV_VARS'
-import SocketIOClient from 'socket.io-client'
 
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 
@@ -48,7 +42,7 @@ export default class Login extends React.Component {
     this.dealWithData = this.dealWithData.bind(this)
   }
 
-  componentDidMount(): void {
+  componentDidMount() {
     this.setState({ lockIconColor: '#8BC34A' })
   }
 
@@ -61,8 +55,8 @@ export default class Login extends React.Component {
       // this.fetchData()
       this.props.navigation.navigate('HomeScreenCleaner', {
         userToken: 'asdasd',
-        userEmail:'Mona@gmail.com'
-      });
+        userEmail: 'Mona@gmail.com'
+      })
 
       // this.props.navigation.navigate('HomeScreenUser', {
       //   userToken: 'asdasd',
@@ -82,7 +76,7 @@ export default class Login extends React.Component {
         email: this.state.email,
         password: this.state.password
       })
-      this.setState({ userToken: response.data.userToken})
+      this.setState({ userToken: response.data.userToken })
       this.checkIfCleaner()
     } catch (err) {}
   }

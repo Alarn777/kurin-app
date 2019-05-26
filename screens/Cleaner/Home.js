@@ -1,12 +1,5 @@
-import * as React from 'react'
-import {
-  View,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView
-} from 'react-native'
+import React from 'react'
+import { View, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import axios from 'axios'
 import {
   Card,
@@ -125,7 +118,6 @@ class Home extends React.Component {
   }
 
   async enterQueue() {
-
     console.log(this.state)
     try {
       await axios.post(Consts.host + '/enterQueue', {
@@ -218,8 +210,8 @@ class Home extends React.Component {
   }
 
   editEventByCleaner(event, data) {
-    console.log(event)
-    console.log(data)
+    //console.log(event)
+    //console.log(data)
     data.email = this.state.userEmail
     event.status = data.newStatus
     // this.props.addEvent(event)

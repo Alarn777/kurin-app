@@ -3,8 +3,6 @@ import { ActivityIndicator, View } from 'react-native'
 import { Button, Card, Text } from 'react-native-elements'
 import StarRating from 'react-native-star-rating'
 import Modal from 'react-native-modal'
-import axios from 'axios'
-import Consts from '../../ENV_VARS'
 import { bindActionCreators } from 'redux'
 import { addCleaner, addEvent, removeCleaner, removeEvent } from '../../FriendActions'
 import { connect } from 'react-redux'
@@ -23,7 +21,7 @@ class CleanerCard extends React.Component {
     this.removeFromStarred = this.removeFromStarred.bind(this)
   }
 
-  componentDidMount(): void {
+  componentDidMount() {
     this.setState({ cleaner: this.props.cleaner })
   }
 
@@ -69,7 +67,12 @@ class CleanerCard extends React.Component {
           key={this.state.cleaner.name}
           title={this.state.cleaner.name}
           image={{ uri: this.state.cleaner.avatar }}
-          imageStyle={{ alignSelf: 'center', height: 150, width: 200, borderRadius: 100 / 2 }}
+          imageStyle={{
+            alignSelf: 'center',
+            height: 150,
+            width: 200,
+            borderRadius: 100 / 2
+          }}
         >
           <Text style={{ alignSelf: 'center', marginBottom: 10 }}>{this.state.cleaner.about}</Text>
           <View style={{ alignSelf: 'center', width: '50%' }}>

@@ -1,27 +1,9 @@
-import LinearGradient from 'react-native-linear-gradient'
 import Consts from '../ENV_VARS'
-import UserScreen from './User/MainScreen'
-import CleanerScreen from './Cleaner/MainScreenCleaner'
 import Icon from 'react-native-vector-icons/Ionicons'
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel
-} from 'react-native-simple-radio-button'
-import React, { Component } from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Picker,
-  Button,
-  TouchableHighlight,
-  Image,
-  Alert,
-  ImageBackground
-} from 'react-native'
-import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
+import RadioForm from 'react-native-simple-radio-button'
+import React from 'react'
+import { StyleSheet, View, TextInput, Image, ImageBackground } from 'react-native'
+import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 
 export default class Login extends React.Component {
   static navigationOptions = {
@@ -48,7 +30,7 @@ export default class Login extends React.Component {
     this.validateForm = this.validateForm.bind(this)
     this.registerUser = this.registerUser.bind(this)
   }
-  componentDidMount(): void {
+  componentDidMount() {
     this.setState({
       IconColor: '#8BC34A'
     })
@@ -85,8 +67,8 @@ export default class Login extends React.Component {
         },
         body: JSON.stringify(newUser)
       })
-        .then(response => {})
-        .catch(error => {})
+        .then(() => {})
+        .catch(() => {})
     } else {
       newUser = {
         name: this.state.name,
@@ -108,8 +90,8 @@ export default class Login extends React.Component {
         },
         body: JSON.stringify(newUser)
       })
-        .then(response => {})
-        .catch(error => {})
+        .then(() => {})
+        .catch(() => {})
     }
 
     //send to register route
@@ -200,7 +182,7 @@ export default class Login extends React.Component {
           <AwesomeButtonRick
             type="primary"
             width={200}
-            style={{margin:15}}
+            style={{ margin: 15 }}
             onPress={() => this.onClickListener('submit')}
           >
             Register

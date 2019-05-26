@@ -1,12 +1,5 @@
-import * as React from 'react'
-import {
-  View,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView
-} from 'react-native'
+import React from 'react'
+import { View, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import axios from 'axios'
 import {
   Card,
@@ -20,7 +13,6 @@ import {
   ThemeProvider
 } from 'react-native-elements'
 import AwesomeButton from 'react-native-really-awesome-button'
-import StarRating from 'react-native-star-rating'
 import CleanerCard from './CleanerCard'
 import Consts from '../../ENV_VARS'
 import { bindActionCreators } from 'redux'

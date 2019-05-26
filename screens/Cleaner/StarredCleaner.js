@@ -1,23 +1,6 @@
-import * as React from 'react'
-import {
-  View,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView
-} from 'react-native'
-import {
-  Card,
-  Input,
-  Text,
-  ListItem,
-  Divider,
-  Button,
-  Icon,
-  CheckBox,
-  ThemeProvider
-} from 'react-native-elements'
+import React from 'react'
+import { View, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import { Text } from 'react-native-elements'
 import CleanerCard from './UserCard'
 import axios from 'axios'
 import Consts from '../../ENV_VARS'

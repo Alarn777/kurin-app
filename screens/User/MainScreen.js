@@ -1,15 +1,12 @@
-import * as React from 'react'
-import { BottomNavigation, Text } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { View, Image } from 'react-native'
-import { NavigationActions, withNavigationFocus } from 'react-navigation'
+import React from 'react'
+import { BottomNavigation } from 'react-native-paper'
+import { Image } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 
 import Home from './Home'
 import History from './History'
 import Starred from './Starred'
 import UserProfile from './UserProfile'
-import axios from 'axios'
-import Consts from '../../ENV_VARS'
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -93,7 +90,7 @@ export default class MainScreen extends React.Component {
     this.props.navigation.dispatch(navigateAction)
   }
 
-  _handleIndexChange = index => {
+  handleIndexChange = index => {
     this.setState({ index })
   }
 
@@ -109,7 +106,7 @@ export default class MainScreen extends React.Component {
       <BottomNavigation
         onPress={() => {}}
         navigationState={this.state}
-        onIndexChange={this._handleIndexChange}
+        onIndexChange={this.handleIndexChange}
         renderScene={this._renderScene}
         resetNavigation={this.resetNavigation}
       />

@@ -1,15 +1,12 @@
-import * as React from 'react'
-import { BottomNavigation, Text } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/Ionicons'
-import { View, Image } from 'react-native'
-import { NavigationActions, withNavigationFocus } from 'react-navigation'
+import React from 'react'
+import { BottomNavigation } from 'react-native-paper'
+import { Image } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 
 import Starred from './StarredCleaner'
 import HomeClean from './Home'
 import HistoryClean from './History'
 import CleanerProfile from './CleanerProfile'
-import axios from 'axios'
-import Consts from '../../ENV_VARS'
 
 export default class MainScreenCleaner extends React.Component {
   constructor(props) {

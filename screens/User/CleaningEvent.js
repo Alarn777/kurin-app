@@ -1,8 +1,8 @@
-import React,{ PropTypes } from  "react";
+import React from 'react'
 
 import { ActivityIndicator, View } from 'react-native'
 import * as Progress from 'react-native-progress'
-import { Button, Card, Text, ListItem } from 'react-native-elements'
+import { Button, Card, ListItem } from 'react-native-elements'
 import StarRating from 'react-native-star-rating'
 import Modal from 'react-native-modal'
 import axios from 'axios'
@@ -69,164 +69,146 @@ export default class CleaningEvent extends React.Component {
     this.toggleModal()
   }
 
-  eventStatus(){
-    if(this.state.event.status === 'Finished'){
+  eventStatus() {
+    if (this.state.event.status === 'Finished') {
       return false
     }
     return true
   }
 
-  button(){
-    if(this.state.event.status !== 'Finished'){
+  button() {
+    if (this.state.event.status !== 'Finished') {
       return (
         <View>
-        <Button
-          backgroundColor='#03A9F4'
-          buttonStyle={{
-            borderRadius: 1,
-            margin: 5,
-            backgroundColor: "#FF5722"
-          }}
-          onPress={this.toggleModal}
-          title='Cancel'/>
-          <Modal style={{justifyContent:'center' }} isVisible={this.state.isModalVisible}>
-            <Card
-              title={'Remove Request ?'}
-            >
+          <Button
+            backgroundColor="#03A9F4"
+            buttonStyle={{
+              borderRadius: 1,
+              margin: 5,
+              backgroundColor: '#FF5722'
+            }}
+            onPress={this.toggleModal}
+            title="Cancel"
+          />
+          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
+            <Card title={'Remove Request ?'}>
               <Button
-                backgroundColor='#03A9F4'
+                backgroundColor="#03A9F4"
                 buttonStyle={{
                   borderRadius: 1,
                   margin: 5,
-                  backgroundColor: "#8BC34A"
+                  backgroundColor: '#8BC34A'
                 }}
-                onPress ={this.cancelEvent}
-                title='Yes'/>
+                onPress={this.cancelEvent}
+                title="Yes"
+              />
               <Button
-                backgroundColor='#03A9F4'
+                backgroundColor="#03A9F4"
                 buttonStyle={{
                   borderRadius: 1,
                   margin: 5,
-                  backgroundColor: "red"
+                  backgroundColor: 'red'
                 }}
-                onPress ={this.closeModal}
-                title='No'/>
+                onPress={this.closeModal}
+                title="No"
+              />
             </Card>
           </Modal>
         </View>
-      );
-
+      )
 
       // this.setState({canRate:true})
     }
-    return <View/>
+    return <View />
   }
 
   render() {
     if (this.state.event) {
-
       const progressStyles = {
         color: '',
-        value: 0,
-      };
+        value: 0
+      }
 
-      if(this.state.event.status === 'Requested')
-      {
+      if (this.state.event.status === 'Requested') {
         progressStyles.color = '#FF5722'
         progressStyles.value = 0.3
-
       }
-      if(this.state.event.status === 'Approved')
-      {
-        progressStyles.color = "#ffc107"
+      if (this.state.event.status === 'Approved') {
+        progressStyles.color = '#ffc107'
         progressStyles.value = 0.6
-
       }
-      if(this.state.event.status === 'Finished')
-      {
-        progressStyles.color = "#8BC34A"
+      if (this.state.event.status === 'Finished') {
+        progressStyles.color = '#8BC34A'
         progressStyles.value = 1
-
       }
       let cardWidth = 0
 
-        return (
+      return (
         <Card
-            onLayout={(event) => {
-              var {x, y, width, height} = event.nativeEvent.layout;
-              cardWidth = width
-            }}
+          onLayout={event => {
+            let { x, y, width, height } = event.nativeEvent.layout
+            cardWidth = width
+          }}
           title={'Event ' + this.state.event.date + ' ' + this.state.event.time}
         >
-          <ListItem
-          title={'Agent name: ' + this.state.event.eventCleanerName}
-        />
-          <ListItem
-            title={'Request status: ' + this.state.event.status}
-          >
-          </ListItem>
+          <ListItem title={'Agent name: ' + this.state.event.eventCleanerName} />
+          <ListItem title={'Request status: ' + this.state.event.status} />
 
           <Progress.Bar
             progress={progressStyles.value}
             width={cardWidth}
-            style={{alignSelf:'center',width:'90%'}}
+            style={{ alignSelf: 'center', width: '90%' }}
             color={progressStyles.color}
           />
 
-          <ListItem
-            title={'Agent notes: ' + this.state.event.notesByCleaner}
-          />
-          <ListItem
-            title={'Rate the Clean'}
-          />
-          <View style={{ alignSelf: "center", width: "50%" }}>
+          <ListItem title={'Agent notes: ' + this.state.event.notesByCleaner} />
+          <ListItem title={'Rate the Clean'} />
+          <View style={{ alignSelf: 'center', width: '50%' }}>
             <StarRating
               style={{ margin: 10 }}
               disabled={this.eventStatus()}
-              emptyStar={"ios-star-outline"}
-              fullStar={"ios-star"}
-              halfStar={"ios-star-half"}
-              iconSet={"Ionicons"}
+              emptyStar={'ios-star-outline'}
+              fullStar={'ios-star'}
+              halfStar={'ios-star-half'}
+              iconSet={'Ionicons'}
               starSize={20}
               maxStars={5}
               rating={this.state.starCount}
-              selectedStar={(rating) => this.onStarRatingPress(rating)}
-              fullStarColor={"gold"}
+              selectedStar={rating => this.onStarRatingPress(rating)}
+              fullStarColor={'gold'}
             />
           </View>
           {this.button()}
           <Button
-            backgroundColor='#03A9F4'
+            backgroundColor="#03A9F4"
             buttonStyle={{
               borderRadius: 1,
               margin: 5,
-              backgroundColor: "#ffc107"
+              backgroundColor: '#ffc107'
             }}
-            onPress ={this.toggleModalOK}
-            title='Add to starred'/>
-          <Modal style={{justifyContent:'center' }} isVisible={this.state.isModalVisibleOK}>
-            <Card
-              title={'Added ' + this.state.event.eventCleanerName}
-            >
+            onPress={this.toggleModalOK}
+            title="Add to starred"
+          />
+          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisibleOK}>
+            <Card title={'Added ' + this.state.event.eventCleanerName}>
               <Button
-                backgroundColor='#03A9F4'
+                backgroundColor="#03A9F4"
                 buttonStyle={{
                   borderRadius: 1,
                   margin: 5,
-                  backgroundColor: "#ffc107"
+                  backgroundColor: '#ffc107'
                 }}
-                onPress ={() =>{
+                onPress={() => {
                   this.toggleModalOK()
                   this.addToStarredCleaner()
                 }}
-                title='OK'/>
+                title="OK"
+              />
             </Card>
           </Modal>
         </Card>
-    );
-
-    } 
-      return <ActivityIndicator style={{flex:1}} size="large" color="#8BC34A"/>
-    
+      )
+    }
+    return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
   }
 }
