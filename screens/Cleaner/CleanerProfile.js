@@ -12,6 +12,7 @@ import {
 import StarRating from "react-native-star-rating";
 import axios from "axios";
 import Consts from "../../ENV_VARS";
+import AwesomeButtonRick from "react-native-really-awesome-button/src/themes/rick";
 
 const user = {
   name:'John Doe',
@@ -93,9 +94,20 @@ export default class Profile extends Component {
             <Text style={styles.name}>{this.state.user.name}</Text>
             <Text style={styles.info}>{this.state.user.description}</Text>
 
-            <TouchableOpacity onPress={this.logOut} style={styles.buttonContainer}>
-              <Text>Log out</Text>
-            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={this.logOut} style={styles.buttonContainer}>*/}
+            {/*  <Text>Log out</Text>*/}
+            {/*</TouchableOpacity>*/}
+            <AwesomeButtonRick
+              type="primary"
+              width={200}
+              style={{margin:15}}
+              backgroundColor={'#FF5722'}
+              backgroundDarker={'#9d3143'}
+              onPress={this.logOut}
+            >
+              Log out
+            </AwesomeButtonRick>
+
           </View>
         </ScrollView>
       );

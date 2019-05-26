@@ -1,68 +1,66 @@
-import React from "react";
-import { ActivityIndicator, View } from "react-native";
-import { Button, Card, Text } from "react-native-elements";
-import StarRating from "react-native-star-rating";
-import Modal from "react-native-modal";
-import axios from "axios";
-import Consts from "../../ENV_VARS";
-import { bindActionCreators } from 'redux';
-import { addCleaner, addEvent, removeCleaner, removeEvent } from "../../FriendActions";
-import { connect } from "react-redux";
+import React from 'react'
+import { ActivityIndicator, View } from 'react-native'
+import { Button, Card, Text } from 'react-native-elements'
+import StarRating from 'react-native-star-rating'
+import Modal from 'react-native-modal'
+import axios from 'axios'
+import Consts from '../../ENV_VARS'
+import { bindActionCreators } from 'redux'
+import { addCleaner, addEvent, removeCleaner, removeEvent } from '../../FriendActions'
+import { connect } from 'react-redux'
 
 class CleanerCard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       cleaner: null,
       isModalVisible: false,
-      isModalVisibleOK:false,
-    };
+      isModalVisibleOK: false
+    }
 
-    this.pickCleaner = this.pickCleaner.bind(this);
+    this.pickCleaner = this.pickCleaner.bind(this)
     this.renderStarred = this.renderStarred.bind(this)
     this.removeFromStarred = this.removeFromStarred.bind(this)
-
   }
 
   componentDidMount(): void {
-    this.setState({cleaner: this.props.cleaner})
+    this.setState({ cleaner: this.props.cleaner })
   }
 
-  toggleModalOK(){
+  toggleModalOK() {
     this.toggleModal()
     this.pickCleaner()
   }
 
-
   toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
+    this.setState({ isModalVisible: !this.state.isModalVisible })
+  }
 
   pickCleaner() {
     this.props.chooseCleaner(this.state.cleaner)
   }
 
-
-  removeFromStarred(){
+  removeFromStarred() {
     this.props.removeFromStarred(this.state.cleaner)
   }
 
-  renderStarred(){
-    if(this.props.starred)
-      return (<View>
-        <Button
-        backgroundColor='#03A9F4'
-        buttonStyle={{
-          borderRadius: 1,
-          margin: 5,
-          backgroundColor: "#FF5722"
-        }}
-        onPress ={this.removeFromStarred}
-        title='Remove from starred'/>
-       </View>);
-    else
-      return  <View></View>
-
+  renderStarred() {
+    if (this.props.starred)
+      return (
+        <View>
+          <Button
+            backgroundColor="#03A9F4"
+            buttonStyle={{
+              borderRadius: 1,
+              margin: 5,
+              backgroundColor: '#FF5722'
+            }}
+            onPress={this.removeFromStarred}
+            title="Remove from starred"
+          />
+        </View>
+      )
+    return <View />
   }
   render() {
     if (this.state.cleaner) {
@@ -71,89 +69,86 @@ class CleanerCard extends React.Component {
           key={this.state.cleaner.name}
           title={this.state.cleaner.name}
           image={{ uri: this.state.cleaner.avatar }}
-          imageStyle={{ alignSelf: "center", height: 150, width: 200, borderRadius: 100 / 2 }}
+          imageStyle={{ alignSelf: 'center', height: 150, width: 200, borderRadius: 100 / 2 }}
         >
-          <Text style={{ alignSelf: "center", marginBottom: 10 }}>
-            {this.state.cleaner.about}
-          </Text>
-          <View style={{ alignSelf: "center", width: "50%" }}>
+          <Text style={{ alignSelf: 'center', marginBottom: 10 }}>{this.state.cleaner.about}</Text>
+          <View style={{ alignSelf: 'center', width: '50%' }}>
             <StarRating
               style={{ margin: 10 }}
-              disabled={true}
-              emptyStar={"ios-star-outline"}
-              fullStar={"ios-star"}
-              halfStar={"ios-star-half"}
-              iconSet={"Ionicons"}
+              disabled
+              emptyStar={'ios-star-outline'}
+              fullStar={'ios-star'}
+              halfStar={'ios-star-half'}
+              iconSet={'Ionicons'}
               starSize={20}
               maxStars={5}
               rating={this.state.cleaner.rating}
-              fullStarColor={"gold"}
+              fullStarColor={'gold'}
             />
           </View>
           <Button
-            backgroundColor='#03A9F4'
+            backgroundColor="#03A9F4"
             buttonStyle={{
               borderRadius: 1,
               margin: 5,
-              backgroundColor: "#8BC34A"
+              backgroundColor: '#8BC34A'
             }}
             onPress={this.toggleModal}
-            title='Pick'/>
+            title="Pick"
+          />
           {this.renderStarred()}
-          <Modal style={{justifyContent:'center' }} isVisible={this.state.isModalVisible}>
-            <Card
-              title={'Pick ' + this.state.cleaner.name + '?'}
-            >
+          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
+            <Card title={'Pick ' + this.state.cleaner.name + '?'}>
               <Text>Cleaning status is shown in 'My Cleans'</Text>
               <Button
-                backgroundColor='#03A9F4'
+                backgroundColor="#03A9F4"
                 buttonStyle={{
                   borderRadius: 1,
                   margin: 5,
-                  backgroundColor: "#8BC34A"
+                  backgroundColor: '#8BC34A'
                 }}
-
-                onPress ={() =>{
-                 this.toggleModalOK()
-                 // this.pickCleaner()
-               }}
-
-                title='Pick'/>
+                onPress={() => {
+                  this.toggleModalOK()
+                  // this.pickCleaner()
+                }}
+                title="Pick"
+              />
               <Button
-                backgroundColor='#03A9F4'
+                backgroundColor="#03A9F4"
                 buttonStyle={{
                   borderRadius: 1,
                   margin: 5,
-                  backgroundColor: "red"
+                  backgroundColor: 'red'
                 }}
-                onPress ={this.toggleModal}
-                title='No'/>
+                onPress={this.toggleModal}
+                title="No"
+              />
             </Card>
           </Modal>
-        </Card>);
-    } else {
-      return <ActivityIndicator style={{flex:1}} size="large" color="#8BC34A"/>
+        </Card>
+      )
     }
+    return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
   }
 }
 
+const mapStateToProps = state => {
+  const { friends, cleaners } = state
+  return { friends, cleaners }
+}
 
-const mapStateToProps = (state) => {
-  const { friends,cleaners } = state
-  return { friends,cleaners }
-};
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      addCleaner,
+      removeCleaner,
+      addEvent,
+      removeEvent
+    },
+    dispatch
+  )
 
-
-const mapDispatchToProps = dispatch => (
-  bindActionCreators({
-    addCleaner,
-    removeCleaner,
-    addEvent,
-    removeEvent
-  }, dispatch)
-);
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(CleanerCard);
-
-
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(CleanerCard)
