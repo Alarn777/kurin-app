@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import { Text, View, Image, ScrollView, ActivityIndicator } from 'react-native'
 import StarRating from 'react-native-star-rating'
 import axios from 'axios'

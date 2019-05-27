@@ -18,6 +18,42 @@ import Consts from '../../ENV_VARS'
 import { bindActionCreators } from 'redux'
 import { addCleaner, addEvent, removeCleaner, removeEvent } from '../../FriendActions'
 import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+
+const styles = StyleSheet.create({
+  main: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'column'
+  },
+  text: {
+    fontSize: 20,
+    margin: 5
+  },
+  mainButton: {
+    alignSelf: 'center',
+    margin: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  inputIcon: {
+    width: 30,
+    height: 30
+  },
+  image: { height: 200, width: 200 },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    width: '100%',
+    height: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }
+})
 
 class Home extends React.Component {
   constructor(props) {
@@ -45,8 +81,6 @@ class Home extends React.Component {
     this.fetchData = this.fetchData.bind(this)
     this.fetchUser = this.fetchUser.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
-    // this.addToProps = this.addToProps(this)
-    // this.createEvent = this.createEvent(this)
   }
 
   componentDidMount(): void {
@@ -113,8 +147,6 @@ class Home extends React.Component {
   }
 
   chooseCleaner(cleaner) {
-    //cleaner pikced route
-
     const temp = this.state.cleaners
     for (const i in temp) if (cleaner._id === temp[i]._id) temp.splice(i, 1)
 
@@ -165,7 +197,6 @@ class Home extends React.Component {
         </View>
       )
     }
-    //map on the results
     return (
       <View>
         {this.state.cleaners.map(cleaner => {
@@ -207,7 +238,7 @@ class Home extends React.Component {
           }}
         >
           <Image
-            style={{ height: 200, width: 200 }}
+            style={styles.image}
             source={{
               uri: 'http://www.animatedimages.org/data/media/1095/animated-cleaning-image-0048.gif'
             }}
@@ -355,6 +386,11 @@ class Home extends React.Component {
   }
 }
 
+Home.propTypes = {
+  route: PropTypes.any,
+  addEvent: PropTypes.func
+}
+
 const mapStateToProps = state => {
   const { friends, cleaners } = state
   return { friends, cleaners }
@@ -375,61 +411,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home)
-
-const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  image: {},
-  name: {},
-  user: {},
-  header: {
-    backgroundColor: '#8BC34A',
-    height: 200
-  },
-  text: {
-    fontSize: 20,
-    margin: 5
-  },
-  mainButton: {
-    alignSelf: 'center',
-    margin: 50,
-    // backgroundColor: "#00BFFF",
-    // width:'100%',
-    // height:200
-    // color:"#00BFFF",
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonContainer: {
-    marginTop: 10,
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: '#00BFFF'
-  },
-  inputIcon: {
-    width: 30,
-    height: 30
-    // justifyContent: 'center'
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderBottomWidth: 1,
-    width: '100%',
-    height: 30,
-    // margin:15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-})

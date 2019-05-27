@@ -13,7 +13,6 @@ import {
   ThemeProvider
 } from 'react-native-elements'
 import AwesomeButton from 'react-native-really-awesome-button'
-import StarRating from 'react-native-star-rating'
 import Consts from '../../ENV_VARS'
 import { bindActionCreators } from 'redux'
 import {
@@ -27,8 +26,44 @@ import {
 import { connect } from 'react-redux'
 import CleaningEventForCleaner from './CleaningEventForCleaner'
 import RadioForm from 'react-native-simple-radio-button'
-import CleaningEvent from '../User/CleaningEvent'
 import SocketIOClient from 'socket.io-client'
+import PropTypes from 'prop-types'
+
+const styles = StyleSheet.create({
+  main: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'column'
+  },
+  text: {
+    fontSize: 20,
+    margin: 5
+  },
+  mainButton: {
+    alignSelf: 'center',
+    margin: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  inputIcon: {
+    width: 30,
+    height: 30
+    // justifyContent: 'center'
+  },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    width: '100%',
+    height: 30,
+    // margin:15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  }
+})
 
 class Home extends React.Component {
   constructor(props) {
@@ -54,7 +89,6 @@ class Home extends React.Component {
     this.editMode = this.editMode.bind(this)
     this.returnToMainScreen = this.returnToMainScreen.bind(this)
     this.loadingEvents = this.loadingEvents.bind(this)
-    // this.chooseCleaner = this.chooseCleaner.bind(this)
     this.dealWithData = this.dealWithData.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.fetchUser = this.fetchUser.bind(this)
@@ -67,8 +101,7 @@ class Home extends React.Component {
 
   componentDidMount(): void {
     this.props.addSocket(this.socket)
-    this.props.cleaners.socket[0].on('changedStatus', message => {
-      console.log('Message: ' + message)
+    this.props.cleaners.socket[0].on('changedStatus', () => {
       this.props.reloadEvents()
       this.fetchData({ email: this.state.userEmail })
     })
@@ -118,7 +151,6 @@ class Home extends React.Component {
   }
 
   async enterQueue() {
-    console.log(this.state)
     try {
       await axios.post(Consts.host + '/enterQueue', {
         email: this.state.userEmail,
@@ -145,14 +177,11 @@ class Home extends React.Component {
     for (const i in data) {
       if (data[i].status === 'Requested') {
         goodEvents.push(data[i])
-        // console.log(data[i])
       } else {
         this.props.addEvent(data[i])
       }
     }
-    // console.log(goodEvents)
     this.setState({ events: goodEvents })
-    // console.log(this.state)
   }
 
   ToggleBackEventsTrigger() {
@@ -162,23 +191,6 @@ class Home extends React.Component {
 
   returnToMainScreen() {
     this.setState({ loadResults: !this.state.loadResults })
-  }
-
-  chooseCleaner(cleaner) {
-    //cleaner pikced route
-
-    console.log(cleaner)
-    if (cleaner === null) return
-    // this.createEvent({
-    //   cleanFloor: this.state.floor,
-    //   eventUser:this.state.userEmail,
-    //   eventCleaner:cleaner.email,
-    //   eventCleanerName:cleaner.name,
-    //   cleanWindows: this.state.windows,
-    //   cleanBathroom: this.state.bathroom,
-    //   sizeOfTheAppt:this.state.apSize,
-    //   floor:this.state.floorNum,
-    // })
   }
 
   cancelCleaner(event, need_delete) {
@@ -203,7 +215,7 @@ class Home extends React.Component {
   async deleteEvent(id) {
     // this.toggleModal()
     try {
-      const response = await axios.post(Consts.host + '/deleteEvent', {
+      await axios.post(Consts.host + '/deleteEvent', {
         id
       })
     } catch (err) {}
@@ -322,13 +334,6 @@ class Home extends React.Component {
                     }}
                   />
                 </View>
-                {/*<Input*/}
-                {/*  containerStyle={{margin:10}}*/}
-                {/*  label='Size of the apartment'*/}
-                {/*  placeholder='Size in meters'*/}
-                {/*  onChangeText={(apSize) => this.setState({apSize})}*/}
-                {/*  // errorMessage='Must be numerical value'*/}
-                {/*/>*/}
                 <Text style={{ fontSize: 20, margin: 10 }} h5>
                   I can clean:
                 </Text>
@@ -471,65 +476,15 @@ const mapDispatchToProps = dispatch =>
     dispatch
   )
 
+Home.propTypes = {
+  addSocket: PropTypes.any,
+  cleaners: PropTypes.any,
+  route: PropTypes.any,
+  reloadEvents: PropTypes.func,
+  addEvent: PropTypes.func
+}
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Home)
-
-const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  image: {},
-  name: {},
-  user: {},
-  header: {
-    backgroundColor: '#8BC34A',
-    height: 200
-  },
-  text: {
-    fontSize: 20,
-    margin: 5
-  },
-  mainButton: {
-    alignSelf: 'center',
-    margin: 50,
-    // backgroundColor: "#00BFFF",
-    // width:'100%',
-    // height:200
-    // color:"#00BFFF",
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonContainer: {
-    marginTop: 10,
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30,
-    backgroundColor: '#00BFFF'
-  },
-  inputIcon: {
-    width: 30,
-    height: 30
-    // justifyContent: 'center'
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderBottomWidth: 1,
-    width: '100%',
-    height: 30,
-    // margin:15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-})

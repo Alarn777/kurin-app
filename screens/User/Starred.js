@@ -12,6 +12,12 @@ import {
   // addEvent,
   // removeEvent
 } from '../../FriendActions'
+import PropTypes from 'prop-types'
+
+const styles = StyleSheet.create({
+  favorites: { alignSelf: 'center', fontSize: 30 },
+  noResults: { width: '80%', alignSelf: 'center' }
+})
 
 class Starred extends React.Component {
   constructor(props) {
@@ -44,8 +50,6 @@ class Starred extends React.Component {
 
   dealWithData(data) {
     this.props.addCleaner(data)
-
-    this.setState({ cleaners: [...this.state.cleaners, data] })
   }
 
   async fetchUser(data) {
@@ -60,8 +64,6 @@ class Starred extends React.Component {
     })
 
     this.state.user.favorite_cleaners.map(cleaner => {
-      // this.fetchData({email:cleaner})
-
       this.fetchData({ email: cleaner })
     })
   }
@@ -74,11 +76,11 @@ class Starred extends React.Component {
 
     axios
       .post(Consts.host + '/removeFromStarred', params)
-      .then(res => {
-        // this.setState({cleaners:[]})
-        // this.fetchUser({email:this.state.userEmail})
+      .then(() => {
+        this.setState({ cleaners: [] })
+        this.fetchUser({ email: this.state.userEmail })
       })
-      .catch(error => {})
+      .catch(() => {})
 
     this.props.removeCleaner(data)
   }
@@ -90,16 +92,14 @@ class Starred extends React.Component {
       return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
     } else if (this.props.cleaners.favorite_cleaners.length === 0) {
       return (
-        <View style={{ width: '80%', alignSelf: 'center' }}>
+        <View style={styles.noResults}>
           <Text style={styles.text}>You have no starred cleaners, maybe add some?</Text>
         </View>
       )
     }
-
-    //map on the results
     return (
       <View style={{ flex: 1 }}>
-        <Text style={{ alignSelf: 'center', fontSize: 30 }}>My Favorites</Text>
+        <Text style={styles.favorites}>My Favorites</Text>
         <ScrollView>
           {this.props.cleaners.favorite_cleaners.map(cleaner => {
             return (
@@ -122,29 +122,16 @@ class Starred extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  image: {},
-  name: {},
-  user: {},
-  header: {
-    backgroundColor: '#8BC34A',
-    height: 200
-  },
-  text: {
-    fontSize: 20,
-    margin: 5
-  }
-})
-
 const mapStateToProps = state => {
   const { friends, cleaners } = state
   return { friends, cleaners }
+}
+
+Starred.propTypes = {
+  cleaners: PropTypes.any,
+  route: PropTypes.any,
+  addCleaner: PropTypes.func,
+  removeCleaner: PropTypes.func
 }
 
 const mapDispatchToProps = dispatch =>

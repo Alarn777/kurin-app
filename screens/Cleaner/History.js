@@ -6,6 +6,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addEvent, removeEvent, addCleaner, addSocket, reloadEvents } from '../../FriendActions'
+import PropTypes from 'prop-types'
 
 class History extends React.Component {
   constructor(props) {
@@ -18,11 +19,8 @@ class History extends React.Component {
       isModalVisible: false,
       date: ''
     }
-    // this.cancelCleaner = this.cancelCleaner.bind(this)
     this.fetchEvents = this.fetchEvents.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
-    // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
-    // this.fetchCleaner = this.fetchCleaner.bind(this)
   }
 
   componentDidMount() {
@@ -40,9 +38,9 @@ class History extends React.Component {
   }
 
   async editEvent(notes, status) {
-    axios.post(Consts.host + '/addNotes', notes).then(res => {})
+    axios.post(Consts.host + '/addNotes', notes).then(() => {})
 
-    axios.post(Consts.host + '/editEventByCleaner', status).then(res => {})
+    axios.post(Consts.host + '/editEventByCleaner', status).then(() => {})
   }
 
   async fetchEvents(data) {
@@ -88,6 +86,13 @@ class History extends React.Component {
       </View>
     )
   }
+}
+
+History.propTypes = {
+  navigation: PropTypes.any,
+  route: PropTypes.any,
+  addEvent: PropTypes.func,
+  cleaners: PropTypes.any
 }
 
 const mapStateToProps = state => {

@@ -14,11 +14,54 @@ import axios from 'axios'
 import Consts from '../ENV_VARS'
 
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
+import PropTypes from 'prop-types'
+import Profile from './User/UserProfile'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  inputContainer: {
+    borderBottomColor: '#F5FCFF',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 4,
+    borderBottomWidth: 1,
+    width: 300,
+    height: 45,
+    marginBottom: 20,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  inputs: {
+    height: 45,
+    marginLeft: 16,
+    borderBottomColor: '#FFFFFF',
+    flex: 1
+  },
+  inputIcon: {
+    width: 30,
+    height: 30,
+    marginLeft: 15,
+    justifyContent: 'center'
+  },
+  buttonContainer: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
+    width: 250,
+    borderRadius: 30
+  },
+  topImage:{ height: 40 }
+})
 
 export default class Login extends React.Component {
   static navigationOptions = {
     headerTitle: (
-      <Image resizeMode="contain" style={{ height: 40 }} source={require('../assets/logo.png')} />
+      <Image resizeMode="contain" style={styles.topImage} source={require('../assets/logo.png')} />
     ),
     headerTitleStyle: {
       flex: 1,
@@ -53,18 +96,17 @@ export default class Login extends React.Component {
     if (viewId === 'login') {
       //simplifyLogin
       // this.fetchData()
-      this.props.navigation.navigate('HomeScreenCleaner', {
+      // this.props.navigation.navigate('HomeScreenCleaner', {
+      //   userToken: 'asdasd',
+      //   userEmail: 'Mona@gmail.com'
+      // })
+
+      this.props.navigation.navigate('HomeScreenUser', {
         userToken: 'asdasd',
-        userEmail: 'Mona@gmail.com'
+        userEmail: 'John@gmail.com'
       })
 
-    //   this.props.navigation.navigate('HomeScreenUser', {
-      //     //     userToken: 'asdasd',
-      //     //     userEmail: 'John@gmail.com'
-      //     // })
-
       // this.fetchData()
-
       // this.setState({renderCleaner:true})
       // this.props.navigation.navigate('HomeScreenUser')
     }
@@ -202,43 +244,7 @@ export default class Login extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-    // backgroundColor: '#DCDCDC'
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderBottomWidth: 1,
-    width: 300,
-    height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  inputs: {
-    height: 45,
-    marginLeft: 16,
-    borderBottomColor: '#FFFFFF',
-    flex: 1
-  },
-  inputIcon: {
-    width: 30,
-    height: 30,
-    marginLeft: 15,
-    justifyContent: 'center'
-  },
-  buttonContainer: {
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30
-  }
-})
+Login.propTypes = {
+  route: PropTypes.any,
+  navigation: PropTypes.any
+}

@@ -5,12 +5,15 @@ import { Bar } from 'react-native-progress'
 import { Button, Card, Text, ListItem, Icon, Input } from 'react-native-elements'
 import StarRating from 'react-native-star-rating'
 import Modal from 'react-native-modal'
-import { PropTypes } from 'prop-types'
+import PropTypes from 'prop-types'
 
 const styles = StyleSheet.create({
   inputIcon: {
     width: 30,
     height: 30
+  },
+  stars:{
+    marginTop: 100
   },
   inputContainer: {
     borderBottomColor: '#F5FCFF',
@@ -178,7 +181,7 @@ export default class CleaningEventForCleaner extends React.Component {
       return (
         <Card title={'Event Rating'}>
           <StarRating
-            style={{ marginTop: 100 }}
+            style={styles.stars}
             disabled
             emptyStar={'ios-star-outline'}
             fullStar={'ios-star'}
@@ -265,8 +268,6 @@ export default class CleaningEventForCleaner extends React.Component {
       let colorWindows = 'red'
       let iconBathroom = 'close'
       let colorBathroom = 'red'
-      const available = ''
-      const availableColor = 'red'
       if (this.state.event.cleanFloor) {
         iconFloor = 'check'
         colorFloor = '#8BC34A'

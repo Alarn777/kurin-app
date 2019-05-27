@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import Consts from '../../ENV_VARS'
 import CleaningEvent from './CleaningEvent'
 import axios from 'axios'
@@ -7,6 +7,16 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addEvent, removeEvent, addCleaner, addSocket, reloadEvents } from '../../FriendActions'
 import SocketIOClient from 'socket.io-client'
+import PropTypes from 'prop-types'
+
+const styles = StyleSheet.create({
+  eventContainer: { flex: 1 },
+  MyEvents: {
+    alignSelf: 'center',
+    fontSize: 30
+  },
+  error: { width: '80%', alignSelf: 'center' }
+})
 
 class History extends React.Component {
   constructor(props) {
@@ -32,22 +42,16 @@ class History extends React.Component {
 
   componentDidMount(): void {
     this.props.addSocket(this.socket)
-    this.props.cleaners.socket[0].on('changedStatus', message => {
-      console.log('Message: ' + message)
+    this.props.cleaners.socket[0].on('changedStatus', () => {
       this.props.reloadEvents()
       this.fetchUser({ email: this.state.userEmail })
-      console.log(this.props)
     })
-
-    // this.props.cleaners.socket[0].emit('bla','Fuck this')
-
     this.fetchUser({ email: this.state.userEmail })
   }
 
   async fetchCleaner(data) {
     try {
       const response = await axios.post(Consts.host + '/getCleanerByEmail', data)
-      // this.dealWithCleaner(response.data[0])
       this.props.addCleaner(response.data[0])
     } catch (err) {}
   }
@@ -59,14 +63,13 @@ class History extends React.Component {
   }
   async addToStarredCleaner(data) {
     try {
-      const response = await axios.post(Consts.host + '/addToStarred', data)
+      await axios.post(Consts.host + '/addToStarred', data)
     } catch (err) {}
     this.fetchCleaner({ email: data.cleanerEmail })
   }
 
   async submitRating(data) {
-    console.log(data)
-    axios.post(Consts.host + '/submitRating', data).then(res => {
+    axios.post(Consts.host + '/submitRating', data).then(() => {
       this.props.reloadEvents()
       this.fetchUser({ email: this.state.userEmail })
     })
@@ -80,22 +83,20 @@ class History extends React.Component {
 
   cancelCleaner(data) {
     this.props.removeEvent(data)
-
-    // this.fetchUser({email:this.state.userEmail})
   }
 
   render() {
     if (this.props.cleaners.events.length === 0) {
       return (
-        <View style={{ width: '80%', alignSelf: 'center' }}>
+        <View style={styles.error}>
           <Text>We have found no events for you...</Text>
         </View>
       )
     }
 
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={{ alignSelf: 'center', fontSize: 30 }}>My Events</Text>
+      <View style={styles.eventContainer}>
+        <Text style={styles.MyEvents}>My Events</Text>
         <ScrollView>
           {this.props.cleaners.events.map(event => {
             return (
@@ -113,6 +114,17 @@ class History extends React.Component {
       </View>
     )
   }
+}
+
+History.propTypes = {
+  route: PropTypes.any,
+  cleaners: PropTypes.any,
+  reloadEvents: PropTypes.func,
+  addEvent: PropTypes.func,
+  navigation: PropTypes.any,
+  addSocket: PropTypes.func,
+  addCleaner: PropTypes.func,
+  removeEvent: PropTypes.func
 }
 
 const mapStateToProps = state => {

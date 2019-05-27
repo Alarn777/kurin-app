@@ -7,6 +7,7 @@ import Home from './Home'
 import History from './History'
 import Starred from './Starred'
 import UserProfile from './UserProfile'
+import PropTypes from 'prop-types'
 
 export default class MainScreen extends React.Component {
   constructor(props) {
@@ -112,4 +113,9 @@ export default class MainScreen extends React.Component {
       />
     )
   }
+}
+
+MainScreen.propTypes = {
+  navigation: PropTypes.any,
+  addEvent: PropTypes.func
 }

@@ -7,6 +7,7 @@ import Starred from './StarredCleaner'
 import HomeClean from './Home'
 import HistoryClean from './History'
 import CleanerProfile from './CleanerProfile'
+import PropTypes from 'prop-types'
 
 export default class MainScreenCleaner extends React.Component {
   constructor(props) {
@@ -51,7 +52,6 @@ export default class MainScreenCleaner extends React.Component {
           // activeColor: '#F44336',
           navigation: this.props.navigation
         }
-
       ]
     }
     this.resetNavigation = this.resetNavigation.bind(this)
@@ -89,7 +89,7 @@ export default class MainScreenCleaner extends React.Component {
     const navigateAction = NavigationActions.navigate({
       routeName: targetRoute,
       index: 0,
-      params:{ cleaners: index },
+      params: {},
       action: NavigationActions.navigate({ routeName: targetRoute })
     })
 
@@ -110,15 +110,15 @@ export default class MainScreenCleaner extends React.Component {
   render() {
     return (
       <BottomNavigation
-          onPress={()=> {}}
         navigationState={this.state}
-        //   navigationState={}
-        // activeColor={'red'}
-        // activeBackground={'blue'}
         onIndexChange={this._handleIndexChange}
         renderScene={this._renderScene}
         resetNavigation={this.resetNavigation}
       />
     )
   }
+}
+
+MainScreenCleaner.propTypes = {
+  navigation: PropTypes.any
 }

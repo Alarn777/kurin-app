@@ -1,11 +1,21 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import PropTypes from 'prop-types'
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import Consts from '../../ENV_VARS'
 import CleaningEventForCleaner from './CleaningEventForCleaner'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addEvent, removeEvent, addCleaner, addSocket, reloadEvents } from '../../FriendActions'
+
+const styles = StyleSheet.create({
+  eventContainer: { flex: 1 },
+  MyEvents: {
+    alignSelf: 'center',
+    fontSize: 30
+  },
+  error: { width: '80%', alignSelf: 'center' }
+})
 
 class History extends React.Component {
   constructor(props) {
@@ -18,37 +28,18 @@ class History extends React.Component {
       isModalVisible: false,
       date: ''
     }
-    // this.cancelCleaner = this.cancelCleaner.bind(this)
     this.fetchEvents = this.fetchEvents.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
-    // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
-    // this.fetchCleaner = this.fetchCleaner.bind(this)
   }
 
   componentDidMount() {
-    this.props.cleaners.socket[0].on('changedStatus', message => {
-      this.state.cleanEvents = []
+    this.props.cleaners.socket[0].on('changedStatus', () => {
+      this.setState({ cleanEvents: [] })
       this.fetchEvents({ email: this.state.userEmail })
     })
     this.fetchEvents({ email: this.state.userEmail })
   }
 
-  // editEventByCleaner(event, status, notes) {
-  //   notes.email = this.state.userEmail
-  //   event.notesByCleaner = notes.notesByCleaner
-  //   event.id = notes._id
-  //   status.email = this.state.userEmail
-  //
-  //   this.editEvent(notes, status)
-  //   this.props.addEvent(event)
-  // }
-
-  // async editEvent(notes, status) {
-  //   axios.post(Consts.host + '/addNotes', notes).then(res => {})
-  //
-  //   axios.post(Consts.host + '/editEventByCleaner', status).then(res => {})
-  // }
-  //
   async fetchEvents(data) {
     axios.post(Consts.host + '/findEventsByCleanerEmail', data).then(res => {
       this.dealWithUserData(res.data)
@@ -66,15 +57,15 @@ class History extends React.Component {
   render() {
     if (this.props.cleaners.events.length === 0) {
       return (
-        <View style={{ width: '80%', alignSelf: 'center' }}>
+        <View style={styles.error}>
           <Text>We have found no events for you...</Text>
         </View>
       )
     }
 
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={{ alignSelf: 'center', fontSize: 30 }}>My Events</Text>
+      <View style={styles.eventContainer}>
+        <Text style={styles.MyEvents}>My Events</Text>
         <ScrollView>
           {this.props.cleaners.events.map(event => {
             return (
@@ -92,6 +83,13 @@ class History extends React.Component {
       </View>
     )
   }
+}
+
+History.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
+  cleaners: PropTypes.object.isRequired,
+  addEvent: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => {

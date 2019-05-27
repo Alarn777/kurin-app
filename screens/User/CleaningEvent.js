@@ -7,6 +7,7 @@ import StarRating from 'react-native-star-rating'
 import Modal from 'react-native-modal'
 import axios from 'axios'
 import Consts from '../../ENV_VARS'
+import PropTypes from 'prop-types'
 
 export default class CleaningEvent extends React.Component {
   constructor(props) {
@@ -23,7 +24,6 @@ export default class CleaningEvent extends React.Component {
     this.cancelEvent = this.cancelEvent.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.button = this.button.bind(this)
-    // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
   }
 
   onStarRatingPress(rating) {
@@ -58,7 +58,7 @@ export default class CleaningEvent extends React.Component {
   async cancelEvent() {
     this.toggleModal()
     try {
-      const response = await axios.post(Consts.host + '/deleteEvent', {
+      await axios.post(Consts.host + '/deleteEvent', {
         id: this.state.event._id
       })
     } catch (err) {}
@@ -147,7 +147,7 @@ export default class CleaningEvent extends React.Component {
       return (
         <Card
           onLayout={event => {
-            let { x, y, width, height } = event.nativeEvent.layout
+            const { x, y, width, height } = event.nativeEvent.layout
             cardWidth = width
           }}
           title={'Event ' + this.state.event.date + ' ' + this.state.event.time}
@@ -213,4 +213,11 @@ export default class CleaningEvent extends React.Component {
     }
     return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
   }
+}
+
+CleaningEvent.propTypes = {
+  event: PropTypes.any,
+  addToStarredCleaner: PropTypes.func,
+  submitRating: PropTypes.func,
+  cancelCleaner: PropTypes.func
 }
