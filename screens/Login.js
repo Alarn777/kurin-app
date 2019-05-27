@@ -58,10 +58,10 @@ export default class Login extends React.Component {
         userEmail: 'Mona@gmail.com'
       })
 
-      // this.props.navigation.navigate('HomeScreenUser', {
-      //   userToken: 'asdasd',
-      //   userEmail: 'John@gmail.com'
-      // })
+    //   this.props.navigation.navigate('HomeScreenUser', {
+      //     //     userToken: 'asdasd',
+      //     //     userEmail: 'John@gmail.com'
+      //     // })
 
       // this.fetchData()
 

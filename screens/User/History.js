@@ -24,7 +24,7 @@ class History extends React.Component {
     this.dealWithUserData = this.dealWithUserData.bind(this)
     this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
     this.fetchCleaner = this.fetchCleaner.bind(this)
-    // this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    this.submitRating = this.submitRating.bind(this)
     try {
       this.socket = SocketIOClient(Consts.host)
     } catch (e) {}
@@ -32,7 +32,6 @@ class History extends React.Component {
 
   componentDidMount(): void {
     this.props.addSocket(this.socket)
-    console.log(this.props.cleaners.socket[0])
     this.props.cleaners.socket[0].on('changedStatus', message => {
       console.log('Message: ' + message)
       this.props.reloadEvents()
@@ -65,6 +64,14 @@ class History extends React.Component {
     this.fetchCleaner({ email: data.cleanerEmail })
   }
 
+  async submitRating(data) {
+    console.log(data)
+    axios.post(Consts.host + '/submitRating', data).then(res => {
+      this.props.reloadEvents()
+      this.fetchUser({ email: this.state.userEmail })
+    })
+  }
+
   dealWithUserData(data) {
     for (const event in data) {
       this.props.addEvent(data[event])
@@ -93,6 +100,7 @@ class History extends React.Component {
           {this.props.cleaners.events.map(event => {
             return (
               <CleaningEvent
+                submitRating={this.submitRating}
                 key={event._id}
                 event={event}
                 navigation={this.state.navigation}

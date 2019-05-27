@@ -16,7 +16,7 @@ export default class Profile extends Component {
       about: '',
       stars: 0
     }
-    this.logOut = this.handleLogOut.bind(this)
+    this.handleLogOut = this.handleLogOut.bind(this)
     this.fetchData = this.fetchData.bind(this)
     this.dealWithData = this.dealWithData.bind(this)
   }

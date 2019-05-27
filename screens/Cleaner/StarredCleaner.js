@@ -1,114 +1,90 @@
 import React from 'react'
-import { View, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
-import { Text } from 'react-native-elements'
-import CleanerCard from './UserCard'
-import axios from 'axios'
+import { View, Text, ScrollView } from 'react-native'
 import Consts from '../../ENV_VARS'
+import CleaningEventForCleaner from './CleaningEventForCleaner'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import {
-  addCleaner,
-  removeCleaner
-  // addEvent,
-  // removeEvent
-} from '../../FriendActions'
+import { addEvent, removeEvent, addCleaner, addSocket, reloadEvents } from '../../FriendActions'
 
-class Starred extends React.Component {
+class History extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      cleaners: [],
-      data: this.props.cleaners,
-      user: null,
-      loadResults: false,
-      userEmail: this.props.route.navigation.state.params.userEmail
+      cleaner: null,
+      cleanEvents: [],
+      navigation: this.props.navigation,
+      userEmail: this.props.route.navigation.state.params.userEmail,
+      isModalVisible: false,
+      date: ''
     }
-    this.pickCleaner = this.pickCleaner.bind(this)
-    this.dealWithData = this.dealWithData.bind(this)
-    this.fetchData = this.fetchData.bind(this)
-    this.fetchUser = this.fetchUser.bind(this)
+    // this.cancelCleaner = this.cancelCleaner.bind(this)
+    this.fetchEvents = this.fetchEvents.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
-    this.removeFromStarred = this.removeFromStarred.bind(this)
+    // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
+    // this.fetchCleaner = this.fetchCleaner.bind(this)
   }
 
-  componentDidMount(): void {
-    this.fetchUser({ email: this.state.userEmail })
+  componentDidMount() {
+    this.props.cleaners.socket[0].on('changedStatus', message => {
+      this.state.cleanEvents = []
+      this.fetchEvents({ email: this.state.userEmail })
+    })
+    this.fetchEvents({ email: this.state.userEmail })
   }
 
-  async fetchData(data) {
-    try {
-      const response = await axios.post(Consts.host + '/getCleanerByEmail', data)
-      this.dealWithData(response.data[0])
-    } catch (err) {}
-  }
+  // editEventByCleaner(event, status, notes) {
+  //   notes.email = this.state.userEmail
+  //   event.notesByCleaner = notes.notesByCleaner
+  //   event.id = notes._id
+  //   status.email = this.state.userEmail
+  //
+  //   this.editEvent(notes, status)
+  //   this.props.addEvent(event)
+  // }
 
-  dealWithData(data) {
-    this.props.addCleaner(data)
-
-    this.setState({ cleaners: [...this.state.cleaners, data] })
-  }
-
-  async fetchUser(data) {
-    axios.post(Consts.host + '/getUserByEmail', data).then(res => {
-      this.dealWithUserData(res.data[0])
+  // async editEvent(notes, status) {
+  //   axios.post(Consts.host + '/addNotes', notes).then(res => {})
+  //
+  //   axios.post(Consts.host + '/editEventByCleaner', status).then(res => {})
+  // }
+  //
+  async fetchEvents(data) {
+    axios.post(Consts.host + '/findEventsByCleanerEmail', data).then(res => {
+      this.dealWithUserData(res.data)
     })
   }
 
   dealWithUserData(data) {
-    this.setState({
-      user: data
-    })
-
-    this.state.user.favorite_cleaners.map(cleaner => {
-      // this.fetchData({email:cleaner})
-
-      this.fetchData({ email: cleaner })
-    })
-  }
-
-  async removeFromStarred(data) {
-    const params = {
-      cleanerEmail: data.email,
-      userEmail: this.state.userEmail
+    for (const i in data) {
+      if (data[i].status === 'Finished' && data[i].rating === 5) {
+        this.props.addEvent(data[i])
+      }
     }
-
-    axios
-      .post(Consts.host + '/removeFromStarred', params)
-      .then(res => {
-        // this.setState({cleaners:[]})
-        // this.fetchUser({email:this.state.userEmail})
-      })
-      .catch(error => {})
-
-    this.props.removeCleaner(data)
   }
 
-  pickCleaner(cleaner) {}
-
-  renderCleaners() {
-    if (!this.state.user) {
-      return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
-    } else if (this.props.cleaners.favorite_cleaners.length === 0) {
+  render() {
+    if (this.props.cleaners.events.length === 0) {
       return (
         <View style={{ width: '80%', alignSelf: 'center' }}>
-          <Text style={styles.text}>You have no starred cleaners, maybe add some?</Text>
+          <Text>We have found no events for you...</Text>
         </View>
       )
     }
 
-    //map on the results
     return (
       <View style={{ flex: 1 }}>
-        <Text style={{ alignSelf: 'center', fontSize: 30 }}>My Favorites</Text>
+        <Text style={{ alignSelf: 'center', fontSize: 30 }}>My Events</Text>
         <ScrollView>
-          {this.props.cleaners.favorite_cleaners.map(cleaner => {
+          {this.props.cleaners.events.map(event => {
             return (
-              <CleanerCard
-                key={cleaner._id}
-                starred
-                cleaner={cleaner}
-                pickCleaner={() => this.pickCleaner(cleaner)}
-                removeFromStarred={this.removeFromStarred}
+              <CleaningEventForCleaner
+                key={event._id}
+                event={event}
+                home={this}
+                navigation={this.state.navigation}
+                cancelCleaner={null}
+                addToStarredCleaner={null}
               />
             )
           })}
@@ -116,44 +92,21 @@ class Starred extends React.Component {
       </View>
     )
   }
-
-  render() {
-    return <ScrollView>{this.renderCleaners()}</ScrollView>
-  }
 }
 
-const styles = StyleSheet.create({
-  main: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'column'
-  },
-  image: {},
-  name: {},
-  user: {},
-  header: {
-    backgroundColor: '#8BC34A',
-    height: 200
-  },
-  text: {
-    fontSize: 20,
-    margin: 5
-  }
-})
-
 const mapStateToProps = state => {
-  const { friends, cleaners } = state
-  return { friends, cleaners }
+  const { cleaners, events, socket } = state
+  return { cleaners, events, socket }
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      addEvent,
+      removeEvent,
       addCleaner,
-      removeCleaner
-      // addEvent,
-      // removeEvent
+      addSocket,
+      reloadEvents
     },
     dispatch
   )
@@ -161,4 +114,4 @@ const mapDispatchToProps = dispatch =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Starred)
+)(History)

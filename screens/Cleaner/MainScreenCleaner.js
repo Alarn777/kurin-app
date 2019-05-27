@@ -37,7 +37,7 @@ export default class MainScreenCleaner extends React.Component {
         },
         {
           key: 'Starred',
-          title: 'Rate',
+          title: 'Top Rated',
           icon: 'star',
           color: '#ffc107',
           // activeColor: '#F44336',

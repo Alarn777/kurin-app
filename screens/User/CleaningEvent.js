@@ -17,9 +17,9 @@ export default class CleaningEvent extends React.Component {
       canRate: false,
       isModalVisibleOK: false,
       starCount: this.props.event.rating,
-      progress: 0
+      progress: 0,
+      rating: 0
     }
-
     this.cancelEvent = this.cancelEvent.bind(this)
     this.closeModal = this.closeModal.bind(this)
     this.button = this.button.bind(this)
@@ -30,6 +30,7 @@ export default class CleaningEvent extends React.Component {
     this.setState({
       starCount: rating
     })
+    this.props.submitRating({id:this.state.event._id,rating:rating})
   }
 
   addToStarredCleaner() {
@@ -70,7 +71,7 @@ export default class CleaningEvent extends React.Component {
   }
 
   eventStatus() {
-    if (this.state.event.status === 'Finished') {
+    if (this.state.event.status === 'Finished' && this.state.event.rating === 0) {
       return false
     }
     return true
@@ -173,7 +174,8 @@ export default class CleaningEvent extends React.Component {
               iconSet={'Ionicons'}
               starSize={20}
               maxStars={5}
-              rating={this.state.starCount}
+              // rating={this.state.starCount}
+              rating={this.props.event.rating}
               selectedStar={rating => this.onStarRatingPress(rating)}
               fullStarColor={'gold'}
             />
