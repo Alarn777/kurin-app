@@ -54,13 +54,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer
-        //   screenProps={ {
-        //     currentFriends: this.state.currentFriends,
-        //     possibleFriends: this.state.possibleFriends,
-        //     addFriend: this.addFriend,
-        //   } }
-        />
+        <AppContainer />
       </Provider>
     )
   }

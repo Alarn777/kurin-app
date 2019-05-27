@@ -2,13 +2,17 @@ import Consts from '../ENV_VARS'
 import Icon from 'react-native-vector-icons/Ionicons'
 import RadioForm from 'react-native-simple-radio-button'
 import React from 'react'
-import { StyleSheet, View, TextInput, Image, ImageBackground } from 'react-native'
+import { View, TextInput, Image, ImageBackground } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
-
+import styles from './Register.style'
 export default class Login extends React.Component {
   static navigationOptions = {
     headerTitle: (
-      <Image resizeMode="contain" style={{ height: 40 }} source={require('../assets/logo.png')} />
+      <Image
+        resizeMode="contain"
+        style={styles.headerImage}
+        source={require('../assets/logo.png')}
+      />
     ),
     headerTitleStyle: {
       flex: 1,
@@ -97,7 +101,7 @@ export default class Login extends React.Component {
     //send to register route
   }
 
-  onClickListener = viewId => {
+  onClickListener(viewId) {
     if (viewId === 'submit') {
       this.validateForm()
     }
@@ -105,16 +109,9 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <ImageBackground
-        source={require('./assets/Background.jpg')}
-        style={{ width: '100%', height: '100%' }}
-      >
+      <ImageBackground source={require('./assets/Background.jpg')} style={styles.backgroundImage}>
         <View style={styles.container}>
-          <Image
-            resizeMode="contain"
-            style={{ height: 100, marginBottom: 20 }}
-            source={require('../assets/logo.png')}
-          />
+          <Image resizeMode="contain" style={styles.logo} source={require('../assets/logo.png')} />
           <View style={styles.inputContainer}>
             <Icon style={styles.inputIcon} name="ios-person" size={30} color="#8BC34A" />
             <TextInput
@@ -165,7 +162,7 @@ export default class Login extends React.Component {
           </View>
           <View style={styles.inputContainer}>
             <RadioForm
-              style={{ marginTop: 8, marginLeft: 10 }}
+              style={styles.radioSelect}
               radio_props={[
                 { label: 'Cleaner      ', value: true },
                 { label: 'Customer', value: false }
@@ -182,7 +179,7 @@ export default class Login extends React.Component {
           <AwesomeButtonRick
             type="primary"
             width={200}
-            style={{ margin: 15 }}
+            style={styles.registerButton}
             onPress={() => this.onClickListener('submit')}
           >
             Register
@@ -192,52 +189,3 @@ export default class Login extends React.Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-    // backgroundColor: '#DCDCDC',
-  },
-  inputContainer: {
-    borderBottomColor: '#F5FCFF',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 4,
-    borderBottomWidth: 1,
-    width: 300,
-    height: 45,
-    marginBottom: 20,
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  inputs: {
-    height: 45,
-    marginLeft: 16,
-    flex: 1
-  },
-  inputIcon: {
-    width: 30,
-    height: 30,
-    marginLeft: 15,
-    justifyContent: 'center'
-  },
-  buttonContainer: {
-    height: 45,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 20,
-    width: 250,
-    borderRadius: 30
-  },
-  loginButton: {
-    backgroundColor: '#8BC34A'
-  },
-  registerButton: {
-    backgroundColor: '#00BCD4'
-  },
-  loginText: {
-    // color: 'white',
-  }
-})
