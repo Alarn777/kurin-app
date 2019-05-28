@@ -6,6 +6,11 @@ const styles = StyleSheet.create({
     alignItems: 'center'
     // backgroundColor: '#DCDCDC',
   },
+  buttonOK: {
+    borderRadius: 1,
+    margin: 5,
+    backgroundColor: '#ffc107'
+  },
   registerButton: { margin: 15 },
   radioSelect: { marginTop: 8, marginLeft: 10 },
   logo: { height: 100, marginBottom: 20 },

@@ -9,13 +9,11 @@ import {
   Image,
   ImageBackground
 } from 'react-native'
-// import { sha1 } from 'react-native-sha1'
 import axios from 'axios'
 import Consts from '../ENV_VARS'
 
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 import PropTypes from 'prop-types'
-import Profile from './User/UserProfile'
 
 const styles = StyleSheet.create({
   container: {
@@ -55,7 +53,7 @@ const styles = StyleSheet.create({
     width: 250,
     borderRadius: 30
   },
-  topImage:{ height: 40 }
+  topImage: { height: 40 }
 })
 
 export default class Login extends React.Component {
@@ -69,7 +67,8 @@ export default class Login extends React.Component {
       alignSelf: 'center',
       lockIconColor: '',
       renderUser: false,
-      renderCleaner: false
+      renderCleaner: false,
+      IconColor: ''
     }
   }
 
@@ -86,25 +85,27 @@ export default class Login extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({ lockIconColor: '#8BC34A' })
+    this.setState({ IconColor: '#8BC34A' })
   }
 
   onClickListener = viewId => {
     if (viewId === 'register') {
-      this.props.navigation.navigate('Register')
+      this.props.navigation.navigate('Register', {
+        navigation: this.props.navigation
+      })
     }
     if (viewId === 'login') {
       //simplifyLogin
-      // this.fetchData()
+      this.fetchData()
       // this.props.navigation.navigate('HomeScreenCleaner', {
       //   userToken: 'asdasd',
       //   userEmail: 'Mona@gmail.com'
       // })
 
-      this.props.navigation.navigate('HomeScreenUser', {
-        userToken: 'asdasd',
-        userEmail: 'John@gmail.com'
-      })
+      // this.props.navigation.navigate('HomeScreenUser', {
+      //   userToken: 'asdasd',
+      //   userEmail: 'John@gmail.com'
+      // })
 
       // this.fetchData()
       // this.setState({renderCleaner:true})
@@ -118,8 +119,13 @@ export default class Login extends React.Component {
         email: this.state.email,
         password: this.state.password
       })
-      this.setState({ userToken: response.data.userToken })
-      this.checkIfCleaner()
+      if (response.data.userToken) {
+        this.setState({ userToken: response.data.userToken })
+        this.checkIfCleaner()
+        this.setState({ IconColor: '#8BC34A' })
+      } else {
+        this.setState({ IconColor: '#B80000', password: '' })
+      }
     } catch (err) {}
   }
 
@@ -164,7 +170,6 @@ export default class Login extends React.Component {
     //     userEmail: this.state.email
     //   })
     // } else {
-    //   this.setState({ lockIconColor: '#B80000', password: '' })
     // }
   }
 
@@ -191,7 +196,7 @@ export default class Login extends React.Component {
             Faster and reliable cleaning process
           </Text>
           <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-mail" size={30} color="#8BC34A" />
+            <Icon style={styles.inputIcon} name="ios-mail" size={30} color={this.state.IconColor} />
             <TextInput
               style={styles.inputs}
               placeholder="Email"
@@ -201,12 +206,7 @@ export default class Login extends React.Component {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Icon
-              style={styles.inputIcon}
-              name="ios-lock"
-              size={30}
-              color={this.state.lockIconColor}
-            />
+            <Icon style={styles.inputIcon} name="ios-lock" size={30} color={this.state.IconColor} />
             <TextInput
               style={styles.inputs}
               placeholder="Password"

@@ -2,10 +2,15 @@ import Consts from '../ENV_VARS'
 import Icon from 'react-native-vector-icons/Ionicons'
 import RadioForm from 'react-native-simple-radio-button'
 import React from 'react'
-import { View, TextInput, Image, ImageBackground } from 'react-native'
+import { View, TextInput, Image, ImageBackground, ScrollView } from 'react-native'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 import styles from './Register.style'
-export default class Login extends React.Component {
+import axios from 'axios'
+import Modal from 'react-native-modal'
+import { Button, Card } from 'react-native-elements'
+import PropTypes from 'prop-types'
+
+export default class Register extends React.Component {
   static navigationOptions = {
     headerTitle: (
       <Image
@@ -29,10 +34,16 @@ export default class Login extends React.Component {
       password2: '',
       address: '',
       cleaner: false,
-      IconColor: '#8BC34A'
+      avatar: '',
+      IconColor: '#8BC34A',
+      isModalVisible: false,
+      modalText: 'OK'
     }
+    this.toggleModal = this.toggleModal.bind(this)
+    this.register = this.register.bind(this)
     this.validateForm = this.validateForm.bind(this)
     this.registerUser = this.registerUser.bind(this)
+    this.registered = this.registered.bind(this)
   }
   componentDidMount() {
     this.setState({
@@ -41,64 +52,51 @@ export default class Login extends React.Component {
   }
 
   validateForm() {
-    if (this.state.password === '' || this.state.password !== this.state.password2) {
+    if (
+      this.state.email === '' ||
+      this.state.password === '' ||
+      this.state.password !== this.state.password2
+    ) {
       this.setState({ IconColor: '#B80000' })
       this.setState({ password: '', password2: '' })
     } else {
       this.setState({ IconColor: '#8BC34A' })
+      this.toggleModal()
       this.registerUser()
     }
   }
   registerUser() {
-    let newUser = {}
-    if (this.state.cleaner) {
-      newUser = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        address: this.state.address,
-        cleaner: this.state.cleaner,
-        available: false,
-        avatar: 'https://www.w3schools.com/w3css/img_lights.jpg',
-        about: '',
-        rating: 0
-      }
-      fetch(Consts.host + '/createCleaner', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newUser)
-      })
-        .then(() => {})
-        .catch(() => {})
-    } else {
-      newUser = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        address: this.state.address,
-        cleaner: this.state.cleaner,
-        avatar: '',
-        rating: 0,
-        description: '',
-        favorite_cleaners: [],
-        events: []
-      }
-      fetch(Consts.host + '/createUser', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newUser)
-      })
-        .then(() => {})
-        .catch(() => {})
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      address: this.state.address,
+      cleaner: this.state.cleaner,
+      avatar: this.state.avatar,
+      about: this.state.about
     }
+    this.register(newUser)
+  }
 
-    //send to register route
+  toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible })
+  }
+
+  async register(data) {
+    axios.post(Consts.host + '/register', data).then(response => {
+      if (response.data.email) {
+        this.registered(response.data.email)
+      } else {
+        this.registered(null)
+      }
+    })
+  }
+
+  registered(data) {
+    if (data) this.setState({ modalText: 'Registered' + data })
+    else {
+      this.setState({ modalText: 'Failed to register'})
+    }
   }
 
   onClickListener(viewId) {
@@ -110,7 +108,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <ImageBackground source={require('./assets/Background.jpg')} style={styles.backgroundImage}>
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.container}>
           <Image resizeMode="contain" style={styles.logo} source={require('../assets/logo.png')} />
           <View style={styles.inputContainer}>
             <Icon style={styles.inputIcon} name="ios-person" size={30} color="#8BC34A" />
@@ -122,7 +120,7 @@ export default class Login extends React.Component {
             />
           </View>
           <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-mail" size={30} color="#8BC34A" />
+            <Icon style={styles.inputIcon} name="ios-mail" size={30} color={this.state.IconColor} />
             <TextInput
               style={styles.inputs}
               placeholder="Email"
@@ -161,6 +159,24 @@ export default class Login extends React.Component {
             />
           </View>
           <View style={styles.inputContainer}>
+            <Icon style={styles.inputIcon} name="ios-images" size={30} color="#8BC34A" />
+            <TextInput
+              style={styles.inputs}
+              placeholder="Avatar URL"
+              underlineColorAndroid="transparent"
+              onChangeText={avatar => this.setState({ avatar })}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Icon style={styles.inputIcon} name="ios-pizza" size={30} color="#8BC34A" />
+            <TextInput
+              style={styles.inputs}
+              placeholder="About me..."
+              underlineColorAndroid="transparent"
+              onChangeText={about => this.setState({ about })}
+            />
+          </View>
+          <View style={styles.inputContainer}>
             <RadioForm
               style={styles.radioSelect}
               radio_props={[
@@ -180,12 +196,35 @@ export default class Login extends React.Component {
             type="primary"
             width={200}
             style={styles.registerButton}
+            // onPress={this.toggleModal}
             onPress={() => this.onClickListener('submit')}
+            // onPress={() => this.onClickListener('submit')}
           >
             Register
           </AwesomeButtonRick>
-        </View>
+          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
+            <Card title={'Registered successfully'}>
+              <Button
+                backgroundColor="#03A9F4"
+                buttonStyle={styles.buttonOK}
+                // onPress={() => this.onClickListener('submit')}
+                onPress={() => {
+                  this.toggleModal()
+                  this.props.navigation.navigate('Login')
+                }}
+                //
+                //   // this.addToStarredCleaner()
+                // }}
+                title={this.state.modalText}
+              />
+            </Card>
+          </Modal>
+        </ScrollView>
       </ImageBackground>
     )
   }
+}
+
+Register.propTypes = {
+  navigation: PropTypes.any
 }
