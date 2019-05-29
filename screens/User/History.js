@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import Consts from '../../ENV_VARS'
 import CleaningEvent from './CleaningEvent'
 import axios from 'axios'
@@ -52,7 +52,7 @@ class History extends React.Component {
   async fetchCleaner(data) {
     try {
       const response = await axios.post(Consts.host + '/getCleanerByEmail', data)
-      this.props.addCleaner(response.data[0])
+      // this.props.addCleaner(response.data[0])
     } catch (err) {}
   }
 

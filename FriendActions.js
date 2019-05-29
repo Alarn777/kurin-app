@@ -27,3 +27,8 @@ export const addSocket = socket => ({
   type: 'ADD_SOCKET',
   payload: socket
 })
+
+export const reloadCleaners = cleaner => ({
+  type: 'RELOAD_CLEANERS',
+  payload: cleaner
+})

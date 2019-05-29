@@ -8,8 +8,9 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import {
   addCleaner,
-  removeCleaner
-  // addEvent,
+  removeCleaner,
+  addSocket,
+  reloadCleaners
   // removeEvent
 } from '../../FriendActions'
 import PropTypes from 'prop-types'
@@ -35,9 +36,16 @@ class Starred extends React.Component {
     this.fetchUser = this.fetchUser.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
     this.removeFromStarred = this.removeFromStarred.bind(this)
+
+
   }
 
   componentDidMount() {
+    this.props.addSocket(this.socket)
+    this.props.cleaners.socket[0].on('changedStatus', () => {
+      this.props.reloadCleaners()
+      this.fetchUser({ email: this.state.userEmail })
+    })
     this.fetchUser({ email: this.state.userEmail })
   }
 
@@ -131,16 +139,19 @@ Starred.propTypes = {
   cleaners: PropTypes.any,
   route: PropTypes.any,
   addCleaner: PropTypes.func,
-  removeCleaner: PropTypes.func
+  removeCleaner: PropTypes.func,
+  addSocket: PropTypes.func,
+  reloadCleaners: PropTypes.func
+
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       addCleaner,
-      removeCleaner
-      // addEvent,
-      // removeEvent
+      removeCleaner,
+      addSocket,
+      reloadCleaners
     },
     dispatch
   )

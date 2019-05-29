@@ -60,6 +60,8 @@ const cleanerReducer = (state = INITIAL_STATE, action) => {
       }
       return { events, favorite_cleaners, socket }
 
+    case 'RELOAD_CLEANERS':
+      return { events, favorite_cleaners: [], socket }
     default:
       return state
   }
