@@ -49,13 +49,14 @@ class History extends React.Component {
   dealWithUserData(data) {
     for (const i in data) {
       if (data[i].status === 'Finished' && data[i].rating === 5) {
-        this.props.addEvent(data[i])
+        this.setState({ cleanEvents: [...this.state.cleanEvents, data[i]] })
+        // this.props.addEvent(data[i])
       }
     }
   }
 
   render() {
-    if (this.props.cleaners.events.length === 0) {
+    if (this.state.cleanEvents.length === 0) {
       return (
         <View style={styles.error}>
           <Text>We have found no events for you...</Text>
@@ -67,7 +68,7 @@ class History extends React.Component {
       <View style={styles.eventContainer}>
         <Text style={styles.MyEvents}>My Events</Text>
         <ScrollView>
-          {this.props.cleaners.events.map(event => {
+          {this.state.cleanEvents.map(event => {
             return (
               <CleaningEventForCleaner
                 key={event._id}

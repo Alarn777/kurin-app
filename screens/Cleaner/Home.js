@@ -217,6 +217,8 @@ class Home extends React.Component {
     try {
       await axios.post(Consts.host + '/deleteEvent', {
         id
+      }).then(()=> {
+
       })
     } catch (err) {}
   }

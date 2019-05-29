@@ -70,11 +70,13 @@ export default class CleaningEventForCleaner extends React.Component {
     }
 
     // this.cancelEvent = this.cancelEvent.bind(this);
-    this.closeModal = this.handleDeclineRequestNoPress.bind(this)
+    this.handleDeclineRequestNoPress = this.handleDeclineRequestNoPress.bind(this)
     this.button = this.button.bind(this)
-    // this.cancelCleaner = this.cancelCleaner.bind(this)
-    // this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
-    // this.cancelEvent = this.cancelEvent.bind(this)
+    this.handleSubmitJobPress = this.handleSubmitJobPress.bind(this)
+    this.handleDeclineJobPress = this.handleDeclineJobPress.bind(this)
+    this.handleDeclineRequestYesPress = this.handleDeclineRequestYesPress.bind(this)
+    this.handleEditEventByCleaner = this.handleEditEventByCleaner.bind(this)
+    this.handleFinilizeEventByCleaner = this.handleFinilizeEventByCleaner.bind(this)
   }
 
   onStarRatingPress(rating) {
@@ -97,11 +99,11 @@ export default class CleaningEventForCleaner extends React.Component {
     })
   }
 
-  handleDeclineJobPress() {
+  handleDeclineJobPress = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible })
   }
 
-  handleSubmitJobPress() {
+  handleSubmitJobPress = () => {
     this.setState({ isModalVisibleOK: !this.state.isModalVisibleOK })
   }
 
