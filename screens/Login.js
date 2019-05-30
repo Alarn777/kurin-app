@@ -96,16 +96,16 @@ export default class Login extends React.Component {
     }
     if (viewId === 'login') {
       //simplifyLogin
-      // this.fetchData()
+      this.fetchData()
       // this.props.navigation.navigate('HomeScreenCleaner', {
       //   userToken: 'asdasd',
       //   userEmail: 'Mona@gmail.com'
       // })
 
-      this.props.navigation.navigate('HomeScreenUser', {
-        userToken: 'asdasd',
-        userEmail: 'John@gmail.com'
-      })
+      // this.props.navigation.navigate('HomeScreenUser', {
+      //   userToken: 'asdasd',
+      //   userEmail: 'John@gmail.com'
+      // })
 
       // this.fetchData()
       // this.setState({renderCleaner:true})
