@@ -35,13 +35,13 @@ class History extends React.Component {
     this.addToStarredCleaner = this.addToStarredCleaner.bind(this)
     this.fetchCleaner = this.fetchCleaner.bind(this)
     this.submitRating = this.submitRating.bind(this)
-    try {
-      this.socket = SocketIOClient(Consts.host)
-    } catch (e) {}
+    // try {
+    //   this.socket = SocketIOClient(Consts.host)
+    // } catch (e) {}
   }
 
   componentDidMount(): void {
-    this.props.addSocket(this.socket)
+    // this.props.addSocket(this.socket)
     this.props.cleaners.socket[0].on('changedStatus', () => {
       this.props.reloadEvents()
       this.fetchUser({ email: this.state.userEmail })
@@ -51,7 +51,7 @@ class History extends React.Component {
 
   async fetchCleaner(data) {
     try {
-      const response = await axios.post(Consts.host + '/getCleanerByEmail', data)
+      await axios.post(Consts.host + '/getCleanerByEmail', data)
       // this.props.addCleaner(response.data[0])
     } catch (err) {}
   }

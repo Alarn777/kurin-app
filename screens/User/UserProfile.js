@@ -5,6 +5,9 @@ import axios from 'axios'
 import Consts from '../../ENV_VARS'
 import AwesomeButtonRick from 'react-native-really-awesome-button/src/themes/rick'
 import PropTypes from 'prop-types'
+import { bindActionCreators } from 'redux'
+import { reloadEvents, reloadCleaners } from '../../FriendActions'
+import { connect } from 'react-redux'
 
 const styles = StyleSheet.create({
   header: {
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class Profile extends Component {
+class Profile extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -78,6 +81,9 @@ export default class Profile extends Component {
   }
 
   logOut() {
+    this.props.reloadEvents()
+    this.props.reloadCleaners()
+
     this.props.route.navigation.navigate('Login')
   }
 
@@ -121,5 +127,28 @@ export default class Profile extends Component {
 }
 
 Profile.propTypes = {
-  route: PropTypes.any
+  route: PropTypes.any,
+  reloadEvents: PropTypes.func,
+  reloadCleaners: PropTypes.func,
+  navigation: PropTypes.any,
 }
+
+const mapStateToProps = state => {
+  const { cleaners, events, socket } = state
+  return { cleaners, events, socket }
+}
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      reloadEvents,
+      reloadCleaners
+
+    },
+    dispatch
+  )
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Profile)

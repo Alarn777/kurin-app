@@ -287,7 +287,7 @@ export default class CleaningEventForCleaner extends React.Component {
         <Card title={'Event ' + this.state.event.date + ' ' + this.state.event.time}>
           <ListItem title={'Agent name: ' + this.state.event.eventCleanerName} />
           <ListItem title={'Request status: ' + this.state.event.status} />
-
+          <ListItem title={'Date and time: ' + this.state.event.dayTimeOfEvent} />
           <Bar
             progress={progressStyles.value}
             width={300}

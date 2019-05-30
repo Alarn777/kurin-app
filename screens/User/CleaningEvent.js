@@ -154,10 +154,11 @@ export default class CleaningEvent extends React.Component {
         >
           <ListItem title={'Agent name: ' + this.state.event.eventCleanerName} />
           <ListItem title={'Request status: ' + this.state.event.status} />
+          <ListItem title={'Date and time: ' + this.state.event.dayTimeOfEvent} />
 
           <Progress.Bar
             progress={progressStyles.value}
-            width={cardWidth}
+            width={cardWidth * 0.8}
             style={{ alignSelf: 'center', width: '90%' }}
             color={progressStyles.color}
           />

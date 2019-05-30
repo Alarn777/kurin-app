@@ -28,9 +28,11 @@
     "react-native-fade": "^1.0.3",
     "react-native-fade-in-view": "^1.0.5",
     "react-native-gesture-handler": "^1.2.1",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-linear-gradient": "^2.5.4",
     "react-native-material-bottom-navigation": "^1.0.3",
     "react-native-modal": "^11.0.1",
+    "react-native-modal-datetime-picker": "^7.4.2",
     "react-native-paper": "^2.15.2",
     "react-native-progress": "^3.6.0",
     "react-native-progress-bar-animated": "^1.0.6",
@@ -56,8 +58,8 @@
     "babel-jest": "^24.8.0",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
-    "react-test-renderer": "16.8.3",
-    "prettier": "^1.17.1"
+    "prettier": "^1.17.1",
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native"

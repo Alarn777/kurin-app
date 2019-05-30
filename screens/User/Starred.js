@@ -36,12 +36,10 @@ class Starred extends React.Component {
     this.fetchUser = this.fetchUser.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
     this.removeFromStarred = this.removeFromStarred.bind(this)
-
-
   }
 
   componentDidMount() {
-    this.props.addSocket(this.socket)
+    // this.props.addSocket(this.socket)
     this.props.cleaners.socket[0].on('changedStatus', () => {
       this.props.reloadCleaners()
       this.fetchUser({ email: this.state.userEmail })

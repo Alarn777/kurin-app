@@ -9,6 +9,7 @@ import axios from 'axios'
 import Modal from 'react-native-modal'
 import { Button, Card } from 'react-native-elements'
 import PropTypes from 'prop-types'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default class Register extends React.Component {
   static navigationOptions = {
@@ -95,7 +96,7 @@ export default class Register extends React.Component {
   registered(data) {
     if (data) this.setState({ modalText: 'Registered' + data })
     else {
-      this.setState({ modalText: 'Failed to register'})
+      this.setState({ modalText: 'Failed to register' })
     }
   }
 
@@ -107,120 +108,142 @@ export default class Register extends React.Component {
 
   render() {
     return (
+      <KeyboardAwareScrollView extraScrollHeight={30}>
       <ImageBackground source={require('./assets/Background.jpg')} style={styles.backgroundImage}>
-        <ScrollView contentContainerStyle={styles.container}>
-          <Image resizeMode="contain" style={styles.logo} source={require('../assets/logo.png')} />
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-person" size={30} color="#8BC34A" />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Name"
-              underlineColorAndroid="transparent"
-              onChangeText={name => this.setState({ name })}
+
+          <ScrollView contentContainerStyle={styles.container}>
+            <Image
+              resizeMode="contain"
+              style={styles.logo}
+              source={require('../assets/logo.png')}
             />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-mail" size={30} color={this.state.IconColor} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Email"
-              keyboardType="email-address"
-              underlineColorAndroid="transparent"
-              onChangeText={email => this.setState({ email })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-lock" size={30} color={this.state.IconColor} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Password"
-              secureTextEntry
-              underlineColorAndroid="transparent"
-              onChangeText={password => this.setState({ password })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-lock" size={30} color={this.state.IconColor} />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Repeat password"
-              secureTextEntry
-              underlineColorAndroid="transparent"
-              onChangeText={password2 => this.setState({ password2 })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-home" size={30} color="#8BC34A" />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Address"
-              underlineColorAndroid="transparent"
-              onChangeText={address => this.setState({ address })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-images" size={30} color="#8BC34A" />
-            <TextInput
-              style={styles.inputs}
-              placeholder="Avatar URL"
-              underlineColorAndroid="transparent"
-              onChangeText={avatar => this.setState({ avatar })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Icon style={styles.inputIcon} name="ios-pizza" size={30} color="#8BC34A" />
-            <TextInput
-              style={styles.inputs}
-              placeholder="About me..."
-              underlineColorAndroid="transparent"
-              onChangeText={about => this.setState({ about })}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <RadioForm
-              style={styles.radioSelect}
-              radio_props={[
-                { label: 'Cleaner      ', value: true },
-                { label: 'Customer', value: false }
-              ]}
-              formHorizontal
-              labelHorizontal
-              buttonColor={'#8BC34A'}
-              animation
-              onPress={value => {
-                this.setState({ cleaner: value })
-              }}
-            />
-          </View>
-          <AwesomeButtonRick
-            type="primary"
-            width={200}
-            style={styles.registerButton}
-            // onPress={this.toggleModal}
-            onPress={() => this.onClickListener('submit')}
-            // onPress={() => this.onClickListener('submit')}
-          >
-            Register
-          </AwesomeButtonRick>
-          <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
-            <Card title={'Registered successfully'}>
-              <Button
-                backgroundColor="#03A9F4"
-                buttonStyle={styles.buttonOK}
-                // onPress={() => this.onClickListener('submit')}
-                onPress={() => {
-                  this.toggleModal()
-                  this.props.navigation.navigate('Login')
-                }}
-                //
-                //   // this.addToStarredCleaner()
-                // }}
-                title={this.state.modalText}
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="ios-person" size={30} color="#8BC34A" />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Name"
+                underlineColorAndroid="transparent"
+                onChangeText={name => this.setState({ name })}
               />
-            </Card>
-          </Modal>
-        </ScrollView>
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon
+                style={styles.inputIcon}
+                name="ios-mail"
+                size={30}
+                color={this.state.IconColor}
+              />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Email"
+                keyboardType="email-address"
+                underlineColorAndroid="transparent"
+                onChangeText={email => this.setState({ email })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon
+                style={styles.inputIcon}
+                name="ios-lock"
+                size={30}
+                color={this.state.IconColor}
+              />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Password"
+                secureTextEntry
+                underlineColorAndroid="transparent"
+                onChangeText={password => this.setState({ password })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon
+                style={styles.inputIcon}
+                name="ios-lock"
+                size={30}
+                color={this.state.IconColor}
+              />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Repeat password"
+                secureTextEntry
+                underlineColorAndroid="transparent"
+                onChangeText={password2 => this.setState({ password2 })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="ios-home" size={30} color="#8BC34A" />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Address"
+                underlineColorAndroid="transparent"
+                onChangeText={address => this.setState({ address })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="ios-images" size={30} color="#8BC34A" />
+              <TextInput
+                style={styles.inputs}
+                placeholder="Avatar URL"
+                underlineColorAndroid="transparent"
+                onChangeText={avatar => this.setState({ avatar })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <Icon style={styles.inputIcon} name="ios-pizza" size={30} color="#8BC34A" />
+              <TextInput
+                style={styles.inputs}
+                placeholder="About me..."
+                underlineColorAndroid="transparent"
+                onChangeText={about => this.setState({ about })}
+              />
+            </View>
+            <View style={styles.inputContainer}>
+              <RadioForm
+                style={styles.radioSelect}
+                radio_props={[
+                  { label: 'Cleaner      ', value: true },
+                  { label: 'Customer', value: false }
+                ]}
+                formHorizontal
+                labelHorizontal
+                buttonColor={'#8BC34A'}
+                animation
+                onPress={value => {
+                  this.setState({ cleaner: value })
+                }}
+              />
+            </View>
+            <AwesomeButtonRick
+              type="primary"
+              width={200}
+              style={styles.registerButton}
+              // onPress={this.toggleModal}
+              onPress={() => this.onClickListener('submit')}
+              // onPress={() => this.onClickListener('submit')}
+            >
+              Register
+            </AwesomeButtonRick>
+            <Modal style={{ justifyContent: 'center' }} isVisible={this.state.isModalVisible}>
+              <Card title={'Registered successfully'}>
+                <Button
+                  backgroundColor="#03A9F4"
+                  buttonStyle={styles.buttonOK}
+                  // onPress={() => this.onClickListener('submit')}
+                  onPress={() => {
+                    this.toggleModal()
+                    this.props.navigation.navigate('Login')
+                  }}
+                  //
+                  //   // this.addToStarredCleaner()
+                  // }}
+                  title={this.state.modalText}
+                />
+              </Card>
+            </Modal>
+          </ScrollView>
       </ImageBackground>
+      </KeyboardAwareScrollView>
     )
   }
 }

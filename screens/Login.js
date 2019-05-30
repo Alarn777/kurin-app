@@ -53,7 +53,16 @@ const styles = StyleSheet.create({
     width: 250,
     borderRadius: 30
   },
-  topImage: { height: 40 }
+  topImage: { height: 40 },
+  headerText: {
+    fontFamily: 'Times New Roman',
+    fontSize: 20,
+    fontWeight: 'bold',
+    // color: '#39594b',
+    color: '#b9ff96',
+    marginBottom: 30,
+    marginTop: 40
+  }
 })
 
 export default class Login extends React.Component {
@@ -96,16 +105,16 @@ export default class Login extends React.Component {
     }
     if (viewId === 'login') {
       //simplifyLogin
-      this.fetchData()
+      // this.fetchData()
       // this.props.navigation.navigate('HomeScreenCleaner', {
       //   userToken: 'asdasd',
       //   userEmail: 'Mona@gmail.com'
       // })
 
-      // this.props.navigation.navigate('HomeScreenUser', {
-      //   userToken: 'asdasd',
-      //   userEmail: 'John@gmail.com'
-      // })
+      this.props.navigation.navigate('HomeScreenUser', {
+        userToken: 'asdasd',
+        userEmail: 'John@gmail.com'
+      })
 
       // this.fetchData()
       // this.setState({renderCleaner:true})
@@ -185,16 +194,7 @@ export default class Login extends React.Component {
             style={{ height: 100, marginBottom: 20 }}
             source={require('../assets/logo.png')}
           />
-          <Text
-            style={{
-              fontFamily: 'arial',
-              fontSize: 20,
-              color: '#141823',
-              marginBottom: 100
-            }}
-          >
-            Faster and reliable cleaning process
-          </Text>
+          <Text style={styles.headerText}>Faster and reliable cleaning process</Text>
           <View style={styles.inputContainer}>
             <Icon style={styles.inputIcon} name="ios-mail" size={30} color={this.state.IconColor} />
             <TextInput

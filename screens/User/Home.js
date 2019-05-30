@@ -16,10 +16,12 @@ import AwesomeButton from 'react-native-really-awesome-button'
 import CleanerCard from './CleanerCard'
 import Consts from '../../ENV_VARS'
 import { bindActionCreators } from 'redux'
-import { addCleaner, addEvent, removeCleaner, removeEvent } from '../../FriendActions'
+import { addCleaner, addEvent, removeCleaner, removeEvent, addSocket } from '../../FriendActions'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import DateTimePicker from 'react-native-modal-datetime-picker'
+import SocketIOClient from 'socket.io-client'
 const styles = StyleSheet.create({
   main: {
     justifyContent: 'center',
@@ -52,6 +54,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  greenButton: {
+    alignSelf: 'center',
+    width: '75%',
+    margin: 20,
+    backgroundColor: '#8BC34A'
   }
 })
 
@@ -71,7 +79,9 @@ class Home extends React.Component {
       windows: false,
       bathroom: false,
       loadingCleanersTrigger: false,
-      loadResults: false
+      loadResults: false,
+      isDateTimePickerVisible: false,
+      dayTimeOfEvent: 'Pick Date & Time'
     }
     this.editMode = this.editMode.bind(this)
     this.returnToMainScreen = this.returnToMainScreen.bind(this)
@@ -81,9 +91,14 @@ class Home extends React.Component {
     this.fetchData = this.fetchData.bind(this)
     this.fetchUser = this.fetchUser.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
+    try {
+      this.socket = SocketIOClient(Consts.host)
+    } catch (e) {}
   }
 
   componentDidMount(): void {
+    this.props.addSocket(this.socket)
+
     this.fetchUser({ email: this.state.userEmail })
   }
 
@@ -154,6 +169,7 @@ class Home extends React.Component {
 
     if (cleaner === null) return
     this.createEvent({
+      dayTimeOfEvent: this.state.dayTimeOfEvent,
       cleanFloor: this.state.floor,
       eventUser: this.state.userEmail,
       eventCleaner: cleaner.email,
@@ -180,6 +196,19 @@ class Home extends React.Component {
           this.props.addEvent(res.data[event])
         }
       })
+  }
+
+  showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true })
+  }
+
+  hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false })
+  }
+
+  handleDatePicked = date => {
+    this.setState({ dayTimeOfEvent: date.toString().slice(0, 25) })
+    this.hideDateTimePicker()
   }
 
   renderCleaners() {
@@ -210,12 +239,7 @@ class Home extends React.Component {
           )
         })}
         <Button
-          buttonStyle={{
-            alignSelf: 'center',
-            width: '75%',
-            margin: 20,
-            backgroundColor: '#8BC34A'
-          }}
+          buttonStyle={styles.greenButton}
           title="Back to Main"
           onPress={this.returnToMainScreen}
         />
@@ -250,56 +274,70 @@ class Home extends React.Component {
     if (this.state.user) {
       if (this.state.edit) {
         return (
-          <ScrollView>
-            <ThemeProvider>
-              <Card title="My Home">
-                <Input
-                  containerStyle={{ margin: 10 }}
-                  label="Address"
-                  placeholder="City,street,house,apartment..."
-                  value={this.state.address}
-                  onChangeText={address => this.setState({ address })}
-                />
-                <Input
-                  containerStyle={{ margin: 10 }}
-                  label="Size of the apartment"
-                  placeholder="Size in meters"
-                  onChangeText={apSize => this.setState({ apSize })}
-                  // errorMessage='Must be numerical value'
-                />
-                <Input
-                  containerStyle={{ margin: 10 }}
-                  label="Floor"
-                  placeholder="#"
-                  value={this.state.floorNum}
-                  onChangeText={floorNum => this.setState({ floorNum })}
-                />
-                <Text style={{ fontSize: 20, margin: 10 }} h5>
-                  To clean:
-                </Text>
-                <CheckBox
-                  title="Floor"
-                  checked={this.state.floor}
-                  onPress={() => this.setState({ floor: !this.state.floor })}
-                />
-                <CheckBox
-                  title="Windows"
-                  checked={this.state.windows}
-                  onPress={() => this.setState({ windows: !this.state.windows })}
-                />
-                <CheckBox
-                  title="Bathroom"
-                  checked={this.state.bathroom}
-                  onPress={() => this.setState({ bathroom: !this.state.bathroom })}
-                />
-                <Button
-                  buttonStyle={{ backgroundColor: '#8BC34A' }}
-                  title="Save"
-                  onPress={this.editMode}
-                />
-              </Card>
-            </ThemeProvider>
-          </ScrollView>
+          <KeyboardAwareScrollView extraScrollHeight={30}>
+            <ScrollView>
+              <ThemeProvider>
+                <Card title="My Home">
+                  <Input
+                    // containerStyle={{ margin: 10 }}
+                    label="Address"
+                    placeholder="City,street,house,apartment..."
+                    value={this.state.address}
+                    onChangeText={address => this.setState({ address })}
+                  />
+                  <Input
+                    // containerStyle={{ margin: 10 }}
+                    label="Size of the apartment"
+                    placeholder="Size in meters"
+                    onChangeText={apSize => this.setState({ apSize })}
+                    // errorMessage='Must be numerical value'
+                  />
+                  <Input
+                    containerStyle={{ marginBottom: 10 }}
+                    label="Floor"
+                    placeholder="#"
+                    value={this.state.floorNum}
+                    onChangeText={floorNum => this.setState({ floorNum })}
+                  />
+
+                  <Button
+                    title={this.state.dayTimeOfEvent}
+                    buttonStyle={{ backgroundColor: '#8BC34A' }}
+                    onPress={this.showDateTimePicker}
+                  />
+                  <DateTimePicker
+                    mode={'datetime'}
+                    isVisible={this.state.isDateTimePickerVisible}
+                    onConfirm={this.handleDatePicked}
+                    onCancel={this.hideDateTimePicker}
+                  />
+                  <Text style={{ fontSize: 20, margin: 10 }} h5>
+                    To clean:
+                  </Text>
+                  <CheckBox
+                    title="Floor"
+                    checked={this.state.floor}
+                    onPress={() => this.setState({ floor: !this.state.floor })}
+                  />
+                  <CheckBox
+                    title="Windows"
+                    checked={this.state.windows}
+                    onPress={() => this.setState({ windows: !this.state.windows })}
+                  />
+                  <CheckBox
+                    title="Bathroom"
+                    checked={this.state.bathroom}
+                    onPress={() => this.setState({ bathroom: !this.state.bathroom })}
+                  />
+                  <Button
+                    buttonStyle={{ backgroundColor: '#8BC34A' }}
+                    title="Save"
+                    onPress={this.editMode}
+                  />
+                </Card>
+              </ThemeProvider>
+            </ScrollView>
+          </KeyboardAwareScrollView>
         )
       }
 
@@ -327,6 +365,7 @@ class Home extends React.Component {
           <ScrollView>
             <Card title="My Home">
               <ListItem title={'Address: ' + this.state.user.address} />
+              <ListItem title={'Date and time: ' + this.state.dayTimeOfEvent} />
               <ListItem title={'Size of the apartment: ' + this.state.apSize} />
               <ListItem title={'Floor: ' + this.state.floorNum} />
               <Divider style={{ backgroundColor: 'gray' }} />
@@ -388,7 +427,8 @@ class Home extends React.Component {
 
 Home.propTypes = {
   route: PropTypes.any,
-  addEvent: PropTypes.func
+  addEvent: PropTypes.func,
+  addSocket: PropTypes.func
 }
 
 const mapStateToProps = state => {
@@ -402,7 +442,8 @@ const mapDispatchToProps = dispatch =>
       addCleaner,
       removeCleaner,
       addEvent,
-      removeEvent
+      removeEvent,
+      addSocket
     },
     dispatch
   )
