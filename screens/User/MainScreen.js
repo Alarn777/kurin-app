@@ -47,7 +47,7 @@ export default class MainScreen extends React.Component {
           key: 'UserProfile',
           title: 'Profile',
           icon: 'person',
-          color: 'blue',
+          color: '#00baff',
           navigation: this.props.navigation
         }
       ]

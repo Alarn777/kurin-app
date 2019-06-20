@@ -138,9 +138,8 @@ Starred.propTypes = {
   route: PropTypes.any,
   addCleaner: PropTypes.func,
   removeCleaner: PropTypes.func,
-  addSocket: PropTypes.func,
+  // addSocket: PropTypes.func,
   reloadCleaners: PropTypes.func
-
 }
 
 const mapDispatchToProps = dispatch =>

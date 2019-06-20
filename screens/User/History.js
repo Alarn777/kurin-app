@@ -1,12 +1,12 @@
 import React from 'react'
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
 import Consts from '../../ENV_VARS'
 import CleaningEvent from './CleaningEvent'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { addEvent, removeEvent, addCleaner, addSocket, reloadEvents } from '../../FriendActions'
-import SocketIOClient from 'socket.io-client'
+// import SocketIOClient from 'socket.io-client'
 import PropTypes from 'prop-types'
 
 const styles = StyleSheet.create({
@@ -27,7 +27,8 @@ class History extends React.Component {
       navigation: this.props.navigation,
       userEmail: this.props.route.navigation.state.params.userEmail,
       isModalVisible: false,
-      date: ''
+      date: '',
+      loading: false
     }
     this.cancelCleaner = this.cancelCleaner.bind(this)
     this.fetchUser = this.fetchUser.bind(this)
@@ -44,8 +45,10 @@ class History extends React.Component {
     // this.props.addSocket(this.socket)
     this.props.cleaners.socket[0].on('changedStatus', () => {
       this.props.reloadEvents()
+      this.setState({ loading: true })
       this.fetchUser({ email: this.state.userEmail })
     })
+    this.setState({ loading: true })
     this.fetchUser({ email: this.state.userEmail })
   }
 
@@ -79,6 +82,7 @@ class History extends React.Component {
     for (const event in data) {
       this.props.addEvent(data[event])
     }
+    this.setState({ loading: false })
   }
 
   cancelCleaner(data) {
@@ -86,6 +90,10 @@ class History extends React.Component {
   }
 
   render() {
+    if (this.state.loading && this.props.cleaners.events.length === 0) {
+      return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
+    }
+
     if (this.props.cleaners.events.length === 0) {
       return (
         <View style={styles.error}>
@@ -122,8 +130,8 @@ History.propTypes = {
   reloadEvents: PropTypes.func,
   addEvent: PropTypes.func,
   navigation: PropTypes.any,
-  addSocket: PropTypes.func,
-  addCleaner: PropTypes.func,
+  // addSocket: PropTypes.func,
+  // addCleaner: PropTypes.func,
   removeEvent: PropTypes.func
 }
 

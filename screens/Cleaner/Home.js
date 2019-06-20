@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import {
+  View,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native'
 import axios from 'axios'
 import {
   Card,
@@ -215,11 +222,11 @@ class Home extends React.Component {
   async deleteEvent(id) {
     // this.toggleModal()
     try {
-      await axios.post(Consts.host + '/deleteEvent', {
-        id
-      }).then(()=> {
-
-      })
+      await axios
+        .post(Consts.host + '/deleteEvent', {
+          id
+        })
+        .then(() => {})
     } catch (err) {}
   }
 
@@ -398,41 +405,76 @@ class Home extends React.Component {
         <ThemeProvider style={styles.main}>
           <ScrollView>
             <Card title="My Home">
-              <ListItem title={'About me: ' + this.state.user.about} />
-              <ListItem
-                titleStyle={{ color: availableColor }}
-                title={'Avalibility: ' + available}
+              <Input
+                containerStyle={{ margin: 10 }}
+                label="About me"
+                placeholder="City,street,house,apartment..."
+                value={this.state.about}
+                onChangeText={about => this.setState({ about })}
               />
-              <Divider style={{ backgroundColor: 'gray' }} />
+              <View style={{marginBottom:10}}>
+                <RadioForm
+                  initial={this.state.available}
+                  style={{ marginTop: 8, marginLeft: 10 }}
+                  radio_props={[
+                    { label: 'Available      ', value: true },
+                    { label: 'Not Available', value: false }
+                  ]}
+                  formHorizontal
+                  labelHorizontal
+                  buttonColor={'#8BC34A'}
+                  animation
+                  onPress={value => {
+                    this.setState({ available: value })
+                  }}
+                />
+              </View>
+
+
+
+              {/*<ListItem title={'About me: ' + this.state.user.about} />*/}
+              {/*<ListItem*/}
+              {/*  titleStyle={{ color: availableColor }}*/}
+              {/*  title={'Avalibility: ' + available}*/}
+              {/*/>*/}
+              {/*<Divider style={{ backgroundColor: 'gray' }} />*/}
               <Card title="I can Clean">
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Floor</Text>
-                  <Icon style={styles.inputIcon} name={iconFloor} size={30} color={colorFloor} />
+                  <TouchableOpacity onPress={() => this.setState({ floor: !this.state.floor })}>
+                    <Icon style={styles.inputIcon} name={iconFloor} size={30} color={colorFloor} />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Windows</Text>
-                  <Icon
-                    style={styles.inputIcon}
-                    name={iconWindows}
-                    size={30}
-                    color={colorWindows}
-                  />
+                  <TouchableOpacity onPress={() => this.setState({ windows: !this.state.windows })}>
+                    <Icon
+                      style={styles.inputIcon}
+                      name={iconWindows}
+                      size={30}
+                      color={colorWindows}
+                    />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Bathroom</Text>
-                  <Icon
-                    style={styles.inputIcon}
-                    name={iconBathroom}
-                    size={30}
-                    color={colorBathroom}
-                  />
+                  <TouchableOpacity
+                    onPress={() => this.setState({ bathroom: !this.state.bathroom })}
+                  >
+                    <Icon
+                      style={styles.inputIcon}
+                      name={iconBathroom}
+                      size={30}
+                      color={colorBathroom}
+                    />
+                  </TouchableOpacity>
                 </View>
               </Card>
-              <Button
-                buttonStyle={{ backgroundColor: '#8BC34A', marginTop: 10 }}
-                title="Edit"
-                onPress={this.editMode}
-              />
+              {/*<Button*/}
+              {/*  buttonStyle={{ backgroundColor: '#8BC34A', marginTop: 10 }}*/}
+              {/*  title="Edit"*/}
+              {/*  onPress={this.editMode}*/}
+              {/*/>*/}
             </Card>
 
             <AwesomeButton
@@ -449,7 +491,7 @@ class Home extends React.Component {
                 next(this.loadingEvents)
               }}
             >
-              Enter queue
+              Find work
             </AwesomeButton>
           </ScrollView>
         </ThemeProvider>

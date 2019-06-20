@@ -1,5 +1,12 @@
 import React from 'react'
-import { View, Image, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
+import {
+  View,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity
+} from 'react-native'
 import axios from 'axios'
 import {
   Card,
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
   },
   mainButton: {
     alignSelf: 'center',
-    margin: 50,
+    margin: 20,
     justifyContent: 'center',
     alignItems: 'center'
   },
@@ -364,40 +371,80 @@ class Home extends React.Component {
         <ThemeProvider style={styles.main}>
           <ScrollView>
             <Card title="My Home">
-              <ListItem title={'Address: ' + this.state.user.address} />
-              <ListItem title={'Date and time: ' + this.state.dayTimeOfEvent} />
-              <ListItem title={'Size of the apartment: ' + this.state.apSize} />
-              <ListItem title={'Floor: ' + this.state.floorNum} />
-              <Divider style={{ backgroundColor: 'gray' }} />
+              <Input
+                containerStyle={{ marginBottom: 5 }}
+                label="Address"
+                placeholder="City,street,house,apartment..."
+                value={this.state.address}
+                onChangeText={address => this.setState({ address })}
+              />
+              <Input
+                containerStyle={{ marginBottom: 5 }}
+                label="Size of the apartment"
+                placeholder="Size in meters"
+                onChangeText={apSize => this.setState({ apSize })}
+                // errorMessage='Must be numerical value'
+              />
+              <Input
+                containerStyle={{ marginBottom: 5 }}
+                label="Floor"
+                placeholder="#"
+                value={this.state.floorNum}
+                onChangeText={floorNum => this.setState({ floorNum })}
+              />
+              <Button
+                title={this.state.dayTimeOfEvent}
+                buttonStyle={{ backgroundColor: '#8BC34A', marginTop: 5 }}
+                onPress={this.showDateTimePicker}
+              />
+              <DateTimePicker
+                mode={'datetime'}
+                isVisible={this.state.isDateTimePickerVisible}
+                onConfirm={this.handleDatePicked}
+                onCancel={this.hideDateTimePicker}
+              />
+              {/*<ListItem title={'Address: ' + this.state.user.address} />*/}
+              {/*<ListItem title={'Date and time: ' + this.state.dayTimeOfEvent} />*/}
+              {/*<ListItem title={'Size of the apartment: ' + this.state.apSize} />*/}
+              {/*<ListItem title={'Floor: ' + this.state.floorNum} />*/}
+              {/*<Divider style={{ backgroundColor: 'gray' }} />*/}
+              {/*<Button*/}
+              {/*  buttonStyle={{ backgroundColor: '#8BC34A', marginTop: 10 }}*/}
+              {/*  title="Edit"*/}
+              {/*  onPress={this.editMode}*/}
+              {/*/>*/}
               <Card title="To Clean">
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Floor</Text>
-                  <Icon style={styles.inputIcon} name={iconFloor} size={30} color={colorFloor} />
+                  <TouchableOpacity onPress={() => this.setState({ floor: !this.state.floor })}>
+                    <Icon style={styles.inputIcon} name={iconFloor} size={30} color={colorFloor} />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Windows</Text>
-                  <Icon
-                    style={styles.inputIcon}
-                    name={iconWindows}
-                    size={30}
-                    color={colorWindows}
-                  />
+                  <TouchableOpacity onPress={() => this.setState({ windows: !this.state.windows })}>
+                    <Icon
+                      style={styles.inputIcon}
+                      name={iconWindows}
+                      size={30}
+                      color={colorWindows}
+                    />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={styles.text}>Bathroom</Text>
-                  <Icon
-                    style={styles.inputIcon}
-                    name={iconBathroom}
-                    size={30}
-                    color={colorBathroom}
-                  />
+                  <TouchableOpacity
+                    onPress={() => this.setState({ bathroom: !this.state.bathroom })}
+                  >
+                    <Icon
+                      style={styles.inputIcon}
+                      name={iconBathroom}
+                      size={30}
+                      color={colorBathroom}
+                    />
+                  </TouchableOpacity>
                 </View>
               </Card>
-              <Button
-                buttonStyle={{ backgroundColor: '#8BC34A', marginTop: 10 }}
-                title="Edit"
-                onPress={this.editMode}
-              />
             </Card>
 
             <AwesomeButton

@@ -48,7 +48,7 @@ export default class MainScreenCleaner extends React.Component {
           key: 'CleanerProfile',
           title: 'Profile',
           icon: 'person',
-          color: 'blue',
+          color: '#00baff',
           // activeColor: '#F44336',
           navigation: this.props.navigation
         }

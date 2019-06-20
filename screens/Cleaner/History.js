@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
 import Consts from '../../ENV_VARS'
 import CleaningEventForCleaner from './CleaningEventForCleaner'
 import axios from 'axios'
@@ -17,13 +17,15 @@ class History extends React.Component {
       navigation: this.props.navigation,
       userEmail: this.props.route.navigation.state.params.userEmail,
       isModalVisible: false,
-      date: ''
+      date: '',
+      loading: false
     }
     this.fetchEvents = this.fetchEvents.bind(this)
     this.dealWithUserData = this.dealWithUserData.bind(this)
   }
 
   componentDidMount() {
+    this.setState({ loading: true })
     this.fetchEvents({ email: this.state.userEmail })
   }
 
@@ -55,9 +57,14 @@ class History extends React.Component {
         this.props.addEvent(data[i])
       }
     }
+    this.setState({ loading: false })
   }
 
   render() {
+    if (this.state.loading && this.props.cleaners.events.length === 0) {
+      return <ActivityIndicator style={{ flex: 1 }} size="large" color="#8BC34A" />
+    }
+
     if (this.props.cleaners.events.length === 0) {
       return (
         <View style={{ width: '80%', alignSelf: 'center' }}>
