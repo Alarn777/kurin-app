@@ -23,7 +23,7 @@
     "react": "16.8.3",
     "react-addons-css-transition-group": "^15.6.2",
     "react-icons": "^2",
-    "react-native": "0.59.8",
+    "react-native": "0.62.3",
     "react-native-elements": "^1.1.0",
     "react-native-fade": "^1.0.3",
     "react-native-fade-in-view": "^1.0.5",
